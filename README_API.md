@@ -1,2 +1,3 @@
-``python train_risk_model.py
-uvicorn api_matchmaker:app --host 0.0.0.0 --port 8000 --reload``
+``python train_risk_model.py``
+
+``uvicorn api_matchmaker:app --host 0.0.0.0 --port 8000 --reload``
