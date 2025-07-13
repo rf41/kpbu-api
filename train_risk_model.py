@@ -18,8 +18,6 @@ warnings.filterwarnings('ignore')
 def train_and_save_risk_model():
     """Train model prediksi risiko dan simpan ke file joblib"""
     
-    print("🚀 Starting risk prediction model training...")
-    
     # Path files
     data_path = 'data/data_kpbu_with_token.csv'
     ref_sektor_path = 'data/ref_sektor.csv'
@@ -30,14 +28,13 @@ def train_and_save_risk_model():
     
     try:
         # 1. Load data training
-        print("📊 Loading training data...")
         df = pd.read_csv(data_path)
-        print(f"✅ Loaded {len(df)} projects")
+        print(f" Loaded {len(df)} projects")
         
         # 2. Load referensi sektor
         try:
             df_sektor = pd.read_csv(ref_sektor_path)
-            print(f"✅ Loaded sector reference: {len(df_sektor)} sectors")
+            print(f" Loaded sector reference: {len(df_sektor)} sectors")
             
             # Merge dengan referensi sektor
             df = df.merge(df_sektor[['id_sektor', 'risk_rank']], on='id_sektor', how='left')
@@ -52,7 +49,7 @@ def train_and_save_risk_model():
             print("✅ Added sector risk features")
             
         except Exception as e:
-            print(f"⚠️  Warning: Could not load sector reference: {e}")
+            print(f"Warning: Could not load sector reference: {e}")
             df_sektor = None
         
         # 3. Persiapkan fitur dan target
@@ -96,7 +93,7 @@ def train_and_save_risk_model():
         X_test_scaled = scaler.transform(X_test)
         
         # 7. Train model
-        print("🤖 Training LogisticRegression model...")
+        print("Training LogisticRegression model...")
         model = LogisticRegression(
             random_state=42, 
             max_iter=1000, 
@@ -107,7 +104,7 @@ def train_and_save_risk_model():
         # 8. Evaluate model
         y_pred = model.predict(X_test_scaled)
         accuracy = accuracy_score(y_test, y_pred)
-        print(f"✅ Model accuracy: {accuracy:.2%}")
+        print(f"Model accuracy: {accuracy:.2%}")
         
         # 9. Save semua komponen model
         model_files = {
@@ -127,14 +124,14 @@ def train_and_save_risk_model():
         if df_sektor is not None:
             joblib.dump(df_sektor, model_files['sector_reference'])
         
-        print("💾 Model saved successfully!")
-        print(f"📁 Model files:")
+        print("Model saved successfully!")
+        print(f"Model files:")
         for name, path in model_files.items():
             if os.path.exists(path):
-                print(f"   ✅ {name}: {path}")
+                print(f"    {name}: {path}")
         
         # 10. Print classification report
-        print("\n📈 Model Performance:")
+        print("\nModel Performance:")
         print(classification_report(
             y_test, y_pred, 
             target_names=risk_classes, 
@@ -144,7 +141,7 @@ def train_and_save_risk_model():
         return model_files
         
     except Exception as e:
-        print(f"❌ Error training model: {e}")
+        print(f"Error training model: {e}")
         raise e
 
 if __name__ == "__main__":
