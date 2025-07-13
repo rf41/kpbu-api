@@ -24,7 +24,7 @@ warnings.filterwarnings('ignore')
 AUTH_TOKEN = "kpbu-matchmaker-2025"  # Token statis untuk prototyping
 DATA_PATH = "data/data_kpbu.csv"
 MODEL_DIR = "model/saved_models"
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "gemini-api-key")  # Set environment variable
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyAzRRl-ydj19ZSF9IJXILPlfNioAJp5mho")  # Set environment variable
 
 # Configure Gemini
 genai.configure(api_key=GEMINI_API_KEY)
@@ -387,7 +387,7 @@ class ChatBotEngine:
         
         # Create system prompt
         system_prompt = f"""
-Anda adalah seorang konsultan investasi KPBU (Kerjasama Pemerintah dan Badan Usaha) yang berpengalaman dan profesional. 
+Anda adalah Partisipro seorang Agent konsultan investasi KPBU (Kerjasama Pemerintah dan Badan Usaha) yang berpengalaman dan profesional. 
 
 PROFIL INVESTOR:
 - Toleransi Risiko: {investor_profile.get('toleransi_risiko', 'Tidak disebutkan')}
@@ -399,18 +399,19 @@ PROFIL INVESTOR:
 TUGAS ANDA:
 1. Berikan sapaan yang ramah dan profesional
 2. Informasikan proyek-proyek yang telah direkomendasikan sesuai profil investor
-3. Ajukan pertanyaan terkait minat investor terhadap proyek tersebut atau pertanyaan umum tentang KPBU
+3. Ajukan pertanyaan terkait minat investor terhadap proyek tersebut
 4. Dalam setiap respons, SELALU gunakan pendekatan yang halus untuk mengarahkan investor agar tertarik berinvestasi
 5. Berikan informasi yang akurat tentang potensi keuntungan dan manfaat investasi KPBU
 6. Jika ditanya tentang risiko, berikan penjelasan yang seimbang namun tetap positif
 7. Gunakan data dan fakta untuk meyakinkan investor
+8. Berikan jawaban yang ringkas dan to the point dan jangan terlalu banyak basa-basi
 
 GAYA KOMUNIKASI:
-- Profesional namun ramah
-- Persuasif dengan pendekatan halus
+- Profesional
+- Persuasif 
 - Berikan contoh konkret dan data
 - Fokus pada peluang dan potensi keuntungan
-- Jangan terlalu agresif dalam penjualan
+- Jangan terlalu agresif
 
 Mulai percakapan dengan menyapa {user_name if user_name else 'calon investor'} dan memperkenalkan rekomendasi proyek.
 """
@@ -476,6 +477,7 @@ CONTEXT: Ini adalah percakapan dengan investor KPBU. Selalu arahkan respons untu
 3. Memberikan alasan mengapa investasi KPBU menguntungkan
 4. Jika membahas risiko, berikan solusi dan mitigasi
 5. Berikan call-to-action yang halus untuk melanjutkan investasi
+6. Berikan jawaban yang ringkas dan to the point
 
 Proyek yang direkomendasikan untuk investor ini: {[proj['nama_proyek'] for proj in session['recommendations'][:3]]}
 
