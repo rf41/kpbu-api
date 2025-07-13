@@ -1,0 +1,58 @@
+ID_Proyek,Nama_Proyek,id_sektor,id_status,Durasi_Konsesi_Tahun,Nilai_Investasi_Total_IDR,Profil_Risiko
+PROJ101,Jalan Tol Pandaan-Malang,3,7,35,6359000000000,Tinggi
+PROJ102,Jalan Tol Batang-Semarang,3,7,38,13968000000000,Tinggi
+PROJ103,Optimalisasi Saluran Irigasi Komering,1,2,22,1733000000000,Menengah
+PROJ104,Bendungan Bodri,1,2,25,1744000000000,Menengah
+PROJ105,Optimalisasi HLD Sungai Lombok,1,2,28,1578000000000,Menengah
+PROJ106,PJU Lombok Barat,11,6,21,95000000000,Rendah
+PROJ107,Tol JORR Elevated Cikunir-Ulujami,3,6,39,21266000000000,Tinggi
+PROJ108,Jalan Trans Papua Ruas Jayapura-Wamena (Segmen Mamberamo-Elelim),3,6,33,3600000000000,Menengah
+PROJ109,Penggantian dan/atau Duplikasi Jembatan CH,3,7,30,2199000000000,Menengah
+PROJ110,Penerangan Jalan Umum Kabupaten Madiun,11,7,26,100000000000,Rendah
+PROJ111,Jalan Tol Semarang-Demak,3,7,37,5440000000000,Tinggi
+PROJ112,Jalan Tol Serang-Panimbang,3,7,40,8575000000000,Tinggi
+PROJ113,PLTU Batang - Jawa Tengah,2,7,32,60556000000000,Tinggi
+PROJ114,Jalan Tol Balikpapan-Samarinda,3,7,36,11889000000000,Tinggi
+PROJ115,Jalan Tol Manado-Bitung,3,7,34,4948000000000,Menengah
+PROJ116,Jalan Tol Kediri-Tulungagung,3,6,31,10256000000000,Tinggi
+PROJ117,Jalan Tol Akses Pelabuhan Patimban,4,6,35,5020000000000,Menengah
+PROJ118,SPAM Regional Karian-Serpong,1,6,29,2432000000000,Menengah
+PROJ119,Jalan Tol Yogyakarta-Bawen,3,6,38,14255000000000,Tinggi
+PROJ120,SPAM Regional Jatiluhur I,1,6,27,1675000000000,Menengah
+PROJ121,Jalan Tol Solo-Yogyakarta-Kulonprogo,3,6,39,26636000000000,Tinggi
+PROJ122,Fasilitas Pemanfaatan BMN pada Ibu Kota Lama,16,2,22,5000000000000,Menengah
+PROJ123,Fasilitas Pendukung Penerapan Skema Pendanaan,16,2,24,6000000000000,Tinggi
+PROJ124,Fasilitas Pengembangan Proyek - Tahap 2,16,2,25,7000000000000,Tinggi
+PROJ125,Fasilitas Pengembangan Proyek - Tahap I,16,2,26,7500000000000,Tinggi
+PROJ126,Revitalisasi Pasar Tabanan,16,2,20,655512000000,Rendah
+PROJ127,SPAM Kabupaten Karo,1,2,23,110000000000,Rendah
+PROJ128,RSUD Wangaya,13,2,28,586869000000,Rendah
+PROJ129,Proyek Perkeretaapian Perkotaan Metropolitan Bandung,6,2,33,5171117000000,Menengah
+PROJ130,Pengelolaan dan Pembangunan Armada Kapal Riset Nasional,14,2,30,3808000000000,Menengah
+PROJ131,Pengembangan Rumah Sakit Inche Abdoel Moeis Kota Samarinda,13,3,29,808541687435,Rendah
+PROJ132,Sistem Penyediaan Air Minum Kota Denpasar,1,2,25,808675299819,Rendah
+PROJ133,Rumah Sakit Pendidikan Universitas Padjadjaran,14,2,27,494700000000,Rendah
+PROJ134,Pembangunan Jaringan Distribusi Gas Bumi untuk Rumah Tangga Dengan Skema KPBU Kota Palembang,12,2,26,3200000000000,Menengah
+PROJ135,Sistem Penyediaan Air Minum Umbulan,1,7,35,2390000000000,Menengah
+PROJ136,Tempat Pemrosesan dan Pengolahan Akhir Sampah Manggar,10,2,22,492000000000,Rendah
+PROJ137,Rumah Susun Sewa Karawang Spuur,15,2,24,403000000000,Rendah
+PROJ138,BPLJSKB Proving Ground Bekasi,8,6,31,1740000000000,Menengah
+PROJ139,Bandar Udara Singkawang,5,3,36,4500000000000,Menengah
+PROJ140,Proyek KPBU Bendungan Merangin Terintegrasi SPAM,1,2,29,4770000000000,Menengah
+PROJ141,SPAM Regional Jatigede,1,2,28,2039000000000,Menengah
+PROJ142,Preservasi Jalan Nasional Lintas Timur Sumatera di Provinsi Riau,3,7,30,525500000000,Rendah
+PROJ143,Palapa Ring Paket Barat,9,7,25,1228600000000,Rendah
+PROJ144,Jalan Tol Jakarta Cikampek Selatan,3,6,37,12564042368497,Tinggi
+PROJ145,Jalan Tol Cileunyi Sumedang Dawuan,3,7,35,5781000000000,Tinggi
+PROJ146,Jalan Tol Krian Legundi Bunder Manyar,3,7,36,9017644000000,Tinggi
+PROJ147,Palapa Ring Paket Timur,9,7,28,5087900000000,Tinggi
+PROJ148,Palapa Ring Paket Tengah,9,7,27,1093398654266,Rendah
+PROJ149,SPAM Kota Bandar Lampung,1,7,32,750000000000,Rendah
+PROJ150,Proyek KPBU SPAM Semarang Barat,1,7,33,417300000000,Rendah
+PROJ151,Preservasi Jalan Nasional Lintas Timur Sumatera di Provinsi Sumatera Selatan,3,7,30,1350000000000,Rendah
+PROJ152,Proyek Satelit Multifungsi,9,7,25,6420800000000,Tinggi
+PROJ153,Perkeretaapian Makassar-Parepare,6,7,34,988500000000,Rendah
+PROJ154,Jalan Tol Probolinggo-Banyuwangi,3,6,39,21070000000000,Tinggi
+PROJ155,Jalan Tol Jakarta Cikampek II Elevated,3,7,38,14773554000000,Tinggi
+PROJ156,SPAM Kota Pekanbaru,1,7,31,499500000000,Rendah
+PROJ157,Pembangunan Tempat Pengolahan dan Pemrosesan Akhir Sampah (TPPAS) Regional Legok Nangka,10,4,29,4000000000000,Menengah
