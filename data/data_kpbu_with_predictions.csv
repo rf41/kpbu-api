@@ -1,0 +1,2 @@
+nama_proyek,id_sektor,id_status,durasi_konsesi_tahun,nilai_investasi_total_idr,target_dana_tokenisasi_idr,persentase_tokenisasi,jenis_token_utama,token_risk_level_ordinal,token_ada_jaminan_pokok,token_return_berbasis_kinerja,dok_studi_kelayakan,dok_laporan_keuangan_audit,dok_peringkat_kredit,predicted_risk,prediction_confidence,prediction_timestamp
+Jalan Tol Jakarta-Bandung Test,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,,,,,,,Rendah,67.03,2025-07-13T13:55:38.105491

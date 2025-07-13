@@ -13,6 +13,10 @@ import numpy as np
 import uvicorn
 import os
 import joblib
+import google.generativeai as genai
+import json
+from datetime import datetime
+import uuid
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -20,6 +24,10 @@ warnings.filterwarnings('ignore')
 AUTH_TOKEN = "kpbu-matchmaker-2025"  # Token statis untuk prototyping
 DATA_PATH = "data/data_kpbu.csv"
 MODEL_DIR = "model/saved_models"
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "your-gemini-api-key-here")  # Set environment variable
+
+# Configure Gemini
+genai.configure(api_key=GEMINI_API_KEY)
 
 # ===================== SECURITY =====================
 security = HTTPBearer()
@@ -63,6 +71,8 @@ class RiskPredictionResponse(BaseModel):
     prediction: dict
     probabilities: dict
     risk_analysis: dict
+    data_saved: bool = Field(default=False, description="Whether prediction was saved to dataset")
+    saved_at: Optional[str] = Field(None, description="Timestamp when data was saved")
 
 class ProjectRecommendation(BaseModel):
     ranking: int
@@ -81,6 +91,22 @@ class MatchingResponse(BaseModel):
     projects_after_filter: int
     recommendations: List[ProjectRecommendation]
     statistics: dict
+
+# ===================== CHATBOT MODELS =====================
+class ChatStartRequest(BaseModel):
+    investor_profile: InvestorProfile
+    user_name: Optional[str] = Field(None, description="Nama user untuk personalisasi")
+
+class ChatMessage(BaseModel):
+    session_id: str = Field(..., description="ID sesi chat")
+    message: str = Field(..., description="Pesan dari user")
+
+class ChatResponse(BaseModel):
+    success: bool
+    session_id: str
+    message: str
+    recommendations: Optional[List[dict]] = Field(None, description="Rekomendasi proyek jika chat dimulai")
+    suggested_questions: Optional[List[str]] = Field(None, description="Pertanyaan yang disarankan")
 
 # ===================== DATA LOADER =====================
 class DataLoader:
@@ -287,6 +313,174 @@ class RiskPredictionEngine:
             
         except Exception as e:
             raise Exception(f"Error in risk prediction: {str(e)}")
+    
+    def save_prediction_to_csv(self, project_dict: dict, prediction_result: dict):
+        """Simpan hasil prediksi ke CSV dataset untuk learning"""
+        try:
+            # Path file untuk menyimpan data baru
+            new_data_path = "data/data_kpbu_with_predictions.csv"
+            
+            # Prepare data untuk disimpan
+            save_data = {
+                'nama_proyek': project_dict.get('nama_proyek'),
+                'id_sektor': project_dict.get('id_sektor'),
+                'id_status': project_dict.get('id_status'),
+                'durasi_konsesi_tahun': project_dict.get('durasi_konsesi_tahun'),
+                'nilai_investasi_total_idr': project_dict.get('nilai_investasi_total_idr'),
+                'target_dana_tokenisasi_idr': project_dict.get('target_dana_tokenisasi_idr', 0),
+                'persentase_tokenisasi': project_dict.get('persentase_tokenisasi', 0),
+                'jenis_token_utama': project_dict.get('jenis_token_utama', 'Tidak Ditentukan'),
+                'token_risk_level_ordinal': project_dict.get('token_risk_level_ordinal', 3),
+                'token_ada_jaminan_pokok': project_dict.get('token_ada_jaminan_pokok', False),
+                'token_return_berbasis_kinerja': project_dict.get('token_return_berbasis_kinerja', False),
+                'dok_studi_kelayakan': project_dict.get('dok_studi_kelayakan', False),
+                'dok_laporan_keuangan_audit': project_dict.get('dok_laporan_keuangan_audit', False),
+                'dok_peringkat_kredit': project_dict.get('dok_peringkat_kredit', False),
+                'predicted_risk': prediction_result['predicted_risk'],
+                'prediction_confidence': prediction_result['confidence'],
+                'prediction_timestamp': datetime.now().isoformat()
+            }
+            
+            # Konversi ke DataFrame
+            new_row = pd.DataFrame([save_data])
+            
+            # Check if file exists
+            if os.path.exists(new_data_path):
+                # Load existing data and append
+                existing_df = pd.read_csv(new_data_path)
+                combined_df = pd.concat([existing_df, new_row], ignore_index=True)
+            else:
+                # Create new file
+                combined_df = new_row
+            
+            # Save to CSV
+            combined_df.to_csv(new_data_path, index=False)
+            
+            return True, datetime.now().isoformat()
+            
+        except Exception as e:
+            print(f"Error saving prediction to CSV: {e}")
+            return False, None
+
+# ===================== CHATBOT ENGINE =====================
+class ChatBotEngine:
+    def __init__(self):
+        self.sessions = {}  # Store chat sessions in memory
+        self.model = genai.GenerativeModel('gemini-pro')
+        
+    def start_chat_session(self, investor_profile: dict, user_name: str = None, recommendations: List[dict] = None):
+        """Start a new chat session with matched projects"""
+        session_id = str(uuid.uuid4())
+        
+        # Create initial context with project recommendations
+        projects_info = ""
+        if recommendations:
+            projects_info = "\\n\\nProyek KPBU yang direkomendasikan untuk profil investasi Anda:\\n"
+            for i, proj in enumerate(recommendations[:5], 1):
+                projects_info += f"{i}. {proj['nama_proyek']} ({proj['sektor']})\\n"
+                projects_info += f"   - Profil Risiko: {proj['profil_risiko']}\\n"
+                projects_info += f"   - Durasi: {proj['durasi_tahun']} tahun\\n"
+                projects_info += f"   - Nilai Investasi: Rp {proj['nilai_investasi_triliun']} triliun\\n"
+                projects_info += f"   - Skor Kecocokan: {proj['skor_kecocokan_persen']}%\\n\\n"
+        
+        # Create system prompt
+        system_prompt = f"""
+Anda adalah seorang konsultan investasi KPBU (Kerjasama Pemerintah dan Badan Usaha) yang berpengalaman dan profesional. 
+
+PROFIL INVESTOR:
+- Toleransi Risiko: {investor_profile.get('toleransi_risiko', 'Tidak disebutkan')}
+- Horison Investasi: {investor_profile.get('horison_investasi', 'Tidak disebutkan')}
+- Ukuran Investasi: {investor_profile.get('ukuran_investasi', 'Tidak disebutkan')}
+
+{projects_info}
+
+TUGAS ANDA:
+1. Berikan sapaan yang ramah dan profesional
+2. Informasikan proyek-proyek yang telah direkomendasikan sesuai profil investor
+3. Ajukan pertanyaan terkait minat investor terhadap proyek tersebut atau pertanyaan umum tentang KPBU
+4. Dalam setiap respons, SELALU gunakan pendekatan yang halus untuk mengarahkan investor agar tertarik berinvestasi
+5. Berikan informasi yang akurat tentang potensi keuntungan dan manfaat investasi KPBU
+6. Jika ditanya tentang risiko, berikan penjelasan yang seimbang namun tetap positif
+7. Gunakan data dan fakta untuk meyakinkan investor
+
+GAYA KOMUNIKASI:
+- Profesional namun ramah
+- Persuasif dengan pendekatan halus
+- Berikan contoh konkret dan data
+- Fokus pada peluang dan potensi keuntungan
+- Jangan terlalu agresif dalam penjualan
+
+Mulai percakapan dengan menyapa {user_name if user_name else 'calon investor'} dan memperkenalkan rekomendasi proyek.
+"""
+        
+        # Initialize chat with system prompt
+        chat = self.model.start_chat(history=[])
+        
+        # Store session
+        self.sessions[session_id] = {
+            'chat': chat,
+            'investor_profile': investor_profile,
+            'recommendations': recommendations or [],
+            'created_at': datetime.now(),
+            'user_name': user_name
+        }
+        
+        # Generate initial response
+        try:
+            initial_response = chat.send_message(system_prompt)
+            return session_id, initial_response.text
+        except Exception as e:
+            return session_id, f"Selamat datang! Saya siap membantu Anda dengan investasi KPBU. Ada yang ingin Anda tanyakan tentang proyek-proyek yang direkomendasikan?"
+    
+    def send_message(self, session_id: str, message: str):
+        """Send message to existing chat session"""
+        if session_id not in self.sessions:
+            raise HTTPException(404, "Chat session not found")
+        
+        session = self.sessions[session_id]
+        chat = session['chat']
+        
+        # Add context to user message with investment guidance
+        enhanced_message = f"""
+User message: {message}
+
+CONTEXT: Ini adalah percakapan dengan investor KPBU. Selalu arahkan respons untuk:
+1. Menjawab pertanyaan dengan informatif
+2. Menyoroti keuntungan dan peluang investasi
+3. Memberikan alasan mengapa investasi KPBU menguntungkan
+4. Jika membahas risiko, berikan solusi dan mitigasi
+5. Berikan call-to-action yang halus untuk melanjutkan investasi
+
+Proyek yang direkomendasikan untuk investor ini: {[proj['nama_proyek'] for proj in session['recommendations'][:3]]}
+
+Berikan respons yang persuasif namun profesional.
+"""
+        
+        try:
+            response = chat.send_message(enhanced_message)
+            return response.text
+        except Exception as e:
+            return "Maaf, terjadi kendala teknis. Namun saya tetap siap membantu Anda dengan investasi KPBU. Apakah ada pertanyaan lain yang bisa saya bantu?"
+    
+    def get_session_info(self, session_id: str):
+        """Get session information"""
+        if session_id not in self.sessions:
+            return None
+        return self.sessions[session_id]
+    
+    def cleanup_old_sessions(self, max_age_hours: int = 24):
+        """Clean up old chat sessions"""
+        current_time = datetime.now()
+        expired_sessions = []
+        
+        for session_id, session in self.sessions.items():
+            if (current_time - session['created_at']).total_seconds() > max_age_hours * 3600:
+                expired_sessions.append(session_id)
+        
+        for session_id in expired_sessions:
+            del self.sessions[session_id]
+        
+        return len(expired_sessions)
 
 # ===================== MATCHING ENGINE =====================
 class MatchingEngine:
@@ -461,6 +655,7 @@ app = FastAPI(
 data_loader = DataLoader()
 matching_engine = MatchingEngine(data_loader)
 risk_prediction_engine = RiskPredictionEngine()
+chatbot_engine = ChatBotEngine()
 
 @app.get("/")
 async def root():
@@ -568,6 +763,9 @@ async def predict_project_risk(
         # Prediksi risiko
         prediction_result = risk_prediction_engine.predict_risk(project_dict)
         
+        # Simpan prediksi ke CSV
+        saved, saved_at = risk_prediction_engine.save_prediction_to_csv(project_dict, prediction_result)
+        
         # Format response
         return RiskPredictionResponse(
             success=True,
@@ -585,13 +783,233 @@ async def predict_project_risk(
                 "confidence_percent": prediction_result['confidence']
             },
             probabilities=prediction_result['probabilities'],
-            risk_analysis=prediction_result['risk_analysis']
+            risk_analysis=prediction_result['risk_analysis'],
+            data_saved=saved,
+            saved_at=saved_at
         )
         
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(500, f"Internal server error: {str(e)}")
+
+@app.post("/chat/start", response_model=ChatResponse)
+async def start_chat(
+    request: ChatStartRequest,
+    token: str = Depends(verify_token)
+):
+    """Mulai sesi chat dengan rekomendasi proyek berdasarkan profil investor"""
+    try:
+        # Validasi profil investor
+        profile_dict = request.investor_profile.dict()
+        
+        # Validasi input yang sama seperti endpoint match
+        valid_risk_levels = ['Konservatif', 'Moderat', 'Agresif']
+        valid_horizons = ['Jangka Pendek', 'Jangka Menengah', 'Jangka Panjang']
+        valid_sizes = ['Kecil', 'Menengah', 'Besar', 'Semua']
+        
+        if profile_dict['toleransi_risiko'] not in valid_risk_levels:
+            raise HTTPException(400, f"Invalid toleransi_risiko. Must be one of: {valid_risk_levels}")
+        
+        if profile_dict['horison_investasi'] not in valid_horizons:
+            raise HTTPException(400, f"Invalid horison_investasi. Must be one of: {valid_horizons}")
+        
+        if profile_dict['ukuran_investasi'] not in valid_sizes:
+            raise HTTPException(400, f"Invalid ukuran_investasi. Must be one of: {valid_sizes}")
+        
+        # Dapatkan rekomendasi proyek
+        results = matching_engine.get_recommendations(profile_dict)
+        recommendations = results['recommendations']
+        
+        # Mulai chat session dengan rekomendasi
+        session_id, initial_message = chatbot_engine.start_chat_session(
+            investor_profile=profile_dict,
+            user_name=request.user_name,
+            recommendations=recommendations
+        )
+        
+        # Suggested questions
+        suggested_questions = [
+            f"Ceritakan lebih detail tentang proyek {recommendations[0]['nama_proyek'] if recommendations else 'yang direkomendasikan'}",
+            "Berapa estimasi return yang bisa saya dapatkan?",
+            "Bagaimana cara memulai investasi di proyek KPBU?",
+            "Apa saja risiko investasi KPBU dan bagaimana mitigasinya?",
+            "Apakah ada opsi investasi dengan nilai lebih kecil?"
+        ]
+        
+        return ChatResponse(
+            success=True,
+            session_id=session_id,
+            message=initial_message,
+            recommendations=recommendations[:3] if recommendations else None,
+            suggested_questions=suggested_questions
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(500, f"Error starting chat session: {str(e)}")
+
+@app.post("/chat/message", response_model=ChatResponse)
+async def send_chat_message(
+    request: ChatMessage,
+    token: str = Depends(verify_token)
+):
+    """Kirim pesan ke sesi chat yang aktif"""
+    try:
+        # Kirim pesan ke chatbot
+        response_message = chatbot_engine.send_message(request.session_id, request.message)
+        
+        # Get session info untuk context
+        session_info = chatbot_engine.get_session_info(request.session_id)
+        
+        # Generate suggested follow-up questions based on context
+        suggested_questions = []
+        message_lower = request.message.lower()
+        
+        if any(word in message_lower for word in ['return', 'untung', 'keuntungan', 'profit']):
+            suggested_questions = [
+                "Bagaimana cara menghitung potensi ROI untuk proyek ini?",
+                "Apakah ada historical return dari proyek KPBU serupa?",
+                "Berapa lama waktu yang dibutuhkan untuk break even?"
+            ]
+        elif any(word in message_lower for word in ['risiko', 'risk', 'bahaya']):
+            suggested_questions = [
+                "Apa saja strategi mitigasi risiko yang tersedia?",
+                "Bagaimana track record pemerintah dalam proyek KPBU?",
+                "Apakah ada jaminan atau asuransi untuk investasi ini?"
+            ]
+        elif any(word in message_lower for word in ['mulai', 'start', 'invest', 'cara']):
+            suggested_questions = [
+                "Berapa minimum investasi yang diperlukan?",
+                "Apa saja dokumen yang harus saya siapkan?",
+                "Bagaimana proses due diligence dilakukan?"
+            ]
+        else:
+            suggested_questions = [
+                "Bisakah Anda jelaskan lebih detail tentang struktur investasi?",
+                "Bagaimana perbandingan dengan investasi konvensional lainnya?",
+                "Apakah ada proyek serupa yang sudah berhasil?"
+            ]
+        
+        return ChatResponse(
+            success=True,
+            session_id=request.session_id,
+            message=response_message,
+            suggested_questions=suggested_questions
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(500, f"Error processing chat message: {str(e)}")
+
+@app.get("/chat/session/{session_id}")
+async def get_chat_session(
+    session_id: str,
+    token: str = Depends(verify_token)
+):
+    """Dapatkan informasi sesi chat"""
+    try:
+        session_info = chatbot_engine.get_session_info(session_id)
+        
+        if not session_info:
+            raise HTTPException(404, "Chat session not found")
+        
+        return {
+            "success": True,
+            "session_id": session_id,
+            "investor_profile": session_info['investor_profile'],
+            "recommendations_count": len(session_info['recommendations']),
+            "created_at": session_info['created_at'].isoformat(),
+            "user_name": session_info.get('user_name')
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(500, f"Error retrieving chat session: {str(e)}")
+
+@app.delete("/chat/cleanup")
+async def cleanup_chat_sessions(
+    token: str = Depends(verify_token)
+):
+    """Membersihkan sesi chat yang sudah kadaluarsa (lebih dari 24 jam)"""
+    try:
+        cleaned_count = chatbot_engine.cleanup_old_sessions()
+        
+        return {
+            "success": True,
+            "message": f"Cleaned up {cleaned_count} expired chat sessions",
+            "active_sessions": len(chatbot_engine.sessions)
+        }
+        
+    except Exception as e:
+        raise HTTPException(500, f"Error cleaning up chat sessions: {str(e)}")
+
+@app.get("/dataset/stats")
+async def get_dataset_statistics(
+    token: str = Depends(verify_token)
+):
+    """Mendapatkan statistik dataset termasuk prediksi yang tersimpan"""
+    try:
+        # Statistik dataset asli
+        original_count = len(data_loader.df_proyek)
+        
+        # Check file prediksi baru
+        new_data_path = "data/data_kpbu_with_predictions.csv"
+        predictions_count = 0
+        latest_prediction = None
+        
+        if os.path.exists(new_data_path):
+            predictions_df = pd.read_csv(new_data_path)
+            predictions_count = len(predictions_df)
+            
+            if predictions_count > 0:
+                # Dapatkan prediksi terbaru
+                latest_row = predictions_df.iloc[-1]
+                latest_prediction = {
+                    "nama_proyek": latest_row.get('nama_proyek'),
+                    "predicted_risk": latest_row.get('predicted_risk'),
+                    "prediction_confidence": latest_row.get('prediction_confidence'),
+                    "prediction_timestamp": latest_row.get('prediction_timestamp')
+                }
+        
+        # Statistik sektor
+        sector_distribution = data_loader.df_proyek['Sektor_Proyek'].value_counts().to_dict()
+        
+        # Statistik profil risiko
+        risk_distribution = data_loader.df_proyek['Profil_Risiko'].value_counts().to_dict()
+        
+        # Statistik nilai investasi
+        investment_stats = {
+            "total_value_triliun": round(data_loader.df_proyek['Nilai_Investasi_Total_IDR'].sum() / 1e12, 2),
+            "average_value_triliun": round(data_loader.df_proyek['Nilai_Investasi_Total_IDR'].mean() / 1e12, 2),
+            "max_value_triliun": round(data_loader.df_proyek['Nilai_Investasi_Total_IDR'].max() / 1e12, 2),
+            "min_value_triliun": round(data_loader.df_proyek['Nilai_Investasi_Total_IDR'].min() / 1e12, 2)
+        }
+        
+        return {
+            "success": True,
+            "dataset_info": {
+                "original_projects": original_count,
+                "new_predictions": predictions_count,
+                "total_data_points": original_count + predictions_count,
+                "growth_percentage": round((predictions_count / original_count) * 100, 2) if original_count > 0 else 0
+            },
+            "sector_distribution": sector_distribution,
+            "risk_distribution": risk_distribution,
+            "investment_statistics": investment_stats,
+            "latest_prediction": latest_prediction,
+            "data_sources": {
+                "original_dataset": "data/data_kpbu.csv",
+                "predictions_dataset": "data/data_kpbu_with_predictions.csv",
+                "prediction_model": "model/saved_models/"
+            }
+        }
+        
+    except Exception as e:
+        raise HTTPException(500, f"Error retrieving dataset statistics: {str(e)}")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
