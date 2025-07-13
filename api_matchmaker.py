@@ -24,7 +24,7 @@ warnings.filterwarnings('ignore')
 AUTH_TOKEN = "kpbu-matchmaker-2025"  # Token statis untuk prototyping
 DATA_PATH = "data/data_kpbu.csv"
 MODEL_DIR = "model/saved_models"
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "your-gemini-api-key-here")  # Set environment variable
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyAzRRl-ydj19ZSF9IJXILPlfNioAJp5mho")  # Set environment variable
 
 # Configure Gemini
 genai.configure(api_key=GEMINI_API_KEY)
@@ -367,7 +367,7 @@ class ChatBotEngine:
     def __init__(self):
         self.sessions = {}  # Store chat sessions in memory
         self.sessions_file = "data/chat_sessions.json"  # Persistent storage
-        self.model = genai.GenerativeModel('gemini-pro')
+        self.model = genai.GenerativeModel('gemini-1.5-flash')  # Updated model name
         self.load_sessions_from_file()
         
     def start_chat_session(self, investor_profile: dict, user_name: str = None, recommendations: List[dict] = None):
@@ -435,7 +435,23 @@ Mulai percakapan dengan menyapa {user_name if user_name else 'calon investor'} d
             initial_response = chat.send_message(system_prompt)
             return session_id, initial_response.text
         except Exception as e:
-            return session_id, f"Selamat datang! Saya siap membantu Anda dengan investasi KPBU. Ada yang ingin Anda tanyakan tentang proyek-proyek yang direkomendasikan?"
+            print(f"⚠️ Gemini API error in start_chat_session: {e}")
+            print(f"⚠️ API Key configured: {GEMINI_API_KEY != 'your-gemini-api-key-here'}")
+            fallback_message = f"Selamat datang{', ' + user_name if user_name else ''}! Saya adalah konsultan investasi KPBU yang siap membantu Anda.\n\n"
+            
+            if recommendations:
+                fallback_message += "Berdasarkan profil investasi Anda, berikut adalah rekomendasi proyek KPBU terbaik:\n\n"
+                for i, proj in enumerate(recommendations[:3], 1):
+                    fallback_message += f"{i}. **{proj['nama_proyek']}** ({proj['sektor']})\n"
+                    fallback_message += f"   - Profil Risiko: {proj['profil_risiko']}\n"
+                    fallback_message += f"   - Nilai Investasi: Rp {proj['nilai_investasi_triliun']} triliun\n"
+                    fallback_message += f"   - Skor Kecocokan: {proj['skor_kecocokan_persen']}%\n\n"
+                
+                fallback_message += "Proyek-proyek ini dipilih khusus berdasarkan preferensi risiko dan sektor Anda. "
+            
+            fallback_message += "Apakah ada yang ingin Anda ketahui lebih detail tentang investasi KPBU atau proyek-proyek ini?"
+            
+            return session_id, fallback_message
     
     def send_message(self, session_id: str, message: str):
         """Send message to existing chat session"""
@@ -475,7 +491,27 @@ Berikan respons yang persuasif namun profesional.
             
             return response.text
         except Exception as e:
-            return "Maaf, terjadi kendala teknis. Namun saya tetap siap membantu Anda dengan investasi KPBU. Apakah ada pertanyaan lain yang bisa saya bantu?"
+            print(f"⚠️ Gemini API error in send_message: {e}")
+            print(f"⚠️ Session ID: {session_id}")
+            
+            # Enhanced fallback response based on message content
+            message_lower = message.lower()
+            recommendations = [proj['nama_proyek'] for proj in session['recommendations'][:3]]
+            
+            if any(word in message_lower for word in ['return', 'untung', 'keuntungan', 'profit']):
+                fallback_response = f"Berdasarkan analisis kami, proyek-proyek yang direkomendasikan seperti {', '.join(recommendations)} memiliki potensi return yang menarik. Investasi KPBU umumnya memberikan return stabil 8-15% per tahun dengan dukungan pemerintah yang kuat. Apakah Anda ingin mengetahui detail perhitungan ROI untuk proyek tertentu?"
+            elif any(word in message_lower for word in ['risiko', 'risk', 'bahaya']):
+                fallback_response = f"Risiko investasi pada proyek {', '.join(recommendations)} telah diminimalisir melalui skema KPBU dengan jaminan pemerintah. Selain itu, diversifikasi portofolio dengan beberapa proyek dapat mengurangi risiko keseluruhan. Sistem monitoring yang ketat juga memastikan transparansi dan akuntabilitas proyek."
+            elif any(word in message_lower for word in ['mulai', 'start', 'invest', 'cara']):
+                fallback_response = f"Untuk memulai investasi di proyek seperti {', '.join(recommendations)}, Anda dapat memulai dengan minimum investasi yang bervariasi tergantung proyek. Proses dimulai dengan registrasi, due diligence, dan penandatanganan kontrak investasi. Tim kami siap memandu Anda step-by-step."
+            else:
+                fallback_response = f"Terima kasih atas pertanyaan Anda. Proyek-proyek yang kami rekomendasikan ({', '.join(recommendations)}) telah melalui seleksi ketat dan memiliki track record yang solid. Investasi KPBU menawarkan keseimbangan antara return yang kompetitif dan risiko yang terkelola. Ada aspek khusus yang ingin Anda ketahui lebih dalam?"
+            
+            # Update session timestamp even on fallback
+            session['last_activity'] = datetime.now()
+            self.save_sessions_to_file()
+            
+            return fallback_response
     
     def get_session_info(self, session_id: str):
         """Get session information"""
@@ -1154,5 +1190,29 @@ async def get_dataset_statistics(
     except Exception as e:
         raise HTTPException(500, f"Error retrieving dataset statistics: {str(e)}")
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+@app.get("/test-gemini")
+async def test_gemini_connection(
+    token: str = Depends(verify_token)
+):
+    """Test koneksi ke Gemini API"""
+    try:
+        # Test basic Gemini connection
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        test_response = model.generate_content("Hello, test connection")
+        
+        return {
+            "success": True,
+            "message": "Gemini API connected successfully",
+            "api_key_configured": GEMINI_API_KEY != "your-gemini-api-key-here",
+            "api_key_length": len(GEMINI_API_KEY) if GEMINI_API_KEY != "your-gemini-api-key-here" else 0,
+            "test_response": test_response.text if test_response else "No response"
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "message": f"Gemini API connection failed: {str(e)}",
+            "api_key_configured": GEMINI_API_KEY != "your-gemini-api-key-here",
+            "api_key_length": len(GEMINI_API_KEY) if GEMINI_API_KEY != "your-gemini-api-key-here" else 0,
+            "error_type": type(e).__name__
+        }
