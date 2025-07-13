@@ -366,7 +366,9 @@ class RiskPredictionEngine:
 class ChatBotEngine:
     def __init__(self):
         self.sessions = {}  # Store chat sessions in memory
+        self.sessions_file = "data/chat_sessions.json"  # Persistent storage
         self.model = genai.GenerativeModel('gemini-pro')
+        self.load_sessions_from_file()
         
     def start_chat_session(self, investor_profile: dict, user_name: str = None, recommendations: List[dict] = None):
         """Start a new chat session with matched projects"""
@@ -425,6 +427,9 @@ Mulai percakapan dengan menyapa {user_name if user_name else 'calon investor'} d
             'user_name': user_name
         }
         
+        # Save to persistent storage
+        self.save_sessions_to_file()
+        
         # Generate initial response
         try:
             initial_response = chat.send_message(system_prompt)
@@ -438,6 +443,11 @@ Mulai percakapan dengan menyapa {user_name if user_name else 'calon investor'} d
             raise HTTPException(404, "Chat session not found")
         
         session = self.sessions[session_id]
+        
+        # Restore chat if needed
+        if session['chat'] is None:
+            self.restore_chat_session(session_id)
+        
         chat = session['chat']
         
         # Add context to user message with investment guidance
@@ -458,6 +468,11 @@ Berikan respons yang persuasif namun profesional.
         
         try:
             response = chat.send_message(enhanced_message)
+            
+            # Update session timestamp
+            session['last_activity'] = datetime.now()
+            self.save_sessions_to_file()
+            
             return response.text
         except Exception as e:
             return "Maaf, terjadi kendala teknis. Namun saya tetap siap membantu Anda dengan investasi KPBU. Apakah ada pertanyaan lain yang bisa saya bantu?"
@@ -474,13 +489,108 @@ Berikan respons yang persuasif namun profesional.
         expired_sessions = []
         
         for session_id, session in self.sessions.items():
-            if (current_time - session['created_at']).total_seconds() > max_age_hours * 3600:
+            # Check last activity or created_at
+            last_activity = session.get('last_activity', session['created_at'])
+            if (current_time - last_activity).total_seconds() > max_age_hours * 3600:
                 expired_sessions.append(session_id)
         
         for session_id in expired_sessions:
             del self.sessions[session_id]
         
+        # Save updated sessions
+        if expired_sessions:
+            self.save_sessions_to_file()
+        
         return len(expired_sessions)
+    
+    def load_sessions_from_file(self):
+        """Load chat sessions from persistent storage"""
+        try:
+            if os.path.exists(self.sessions_file):
+                with open(self.sessions_file, 'r', encoding='utf-8') as f:
+                    sessions_data = json.load(f)
+                
+                # Convert string timestamps back to datetime objects
+                for session_id, session_data in sessions_data.items():
+                    session_data['created_at'] = datetime.fromisoformat(session_data['created_at'])
+                    # Don't restore chat object - will be recreated when needed
+                    session_data['chat'] = None
+                    self.sessions[session_id] = session_data
+                
+                print(f"✅ Loaded {len(self.sessions)} chat sessions from storage")
+            else:
+                print("📝 No existing chat sessions file found, starting fresh")
+                
+        except Exception as e:
+            print(f"⚠️ Error loading chat sessions: {e}")
+            self.sessions = {}
+    
+    def save_sessions_to_file(self):
+        """Save chat sessions to persistent storage"""
+        try:
+            # Create data directory if it doesn't exist
+            os.makedirs(os.path.dirname(self.sessions_file), exist_ok=True)
+            
+            # Prepare data for JSON serialization
+            sessions_data = {}
+            for session_id, session in self.sessions.items():
+                # Don't save chat object (not JSON serializable)
+                session_copy = session.copy()
+                session_copy['created_at'] = session_copy['created_at'].isoformat()
+                session_copy.pop('chat', None)  # Remove chat object
+                sessions_data[session_id] = session_copy
+            
+            with open(self.sessions_file, 'w', encoding='utf-8') as f:
+                json.dump(sessions_data, f, ensure_ascii=False, indent=2)
+                
+        except Exception as e:
+            print(f"⚠️ Error saving chat sessions: {e}")
+    
+    def restore_chat_session(self, session_id: str):
+        """Restore chat object for existing session"""
+        if session_id in self.sessions and self.sessions[session_id]['chat'] is None:
+            try:
+                # Recreate chat session with context
+                session_data = self.sessions[session_id]
+                investor_profile = session_data['investor_profile']
+                recommendations = session_data['recommendations']
+                user_name = session_data.get('user_name')
+                
+                # Create system prompt (same as start_chat_session)
+                projects_info = ""
+                if recommendations:
+                    projects_info = "\\n\\nProyek KPBU yang direkomendasikan untuk profil investasi Anda:\\n"
+                    for i, proj in enumerate(recommendations[:5], 1):
+                        projects_info += f"{i}. {proj['nama_proyek']} ({proj['sektor']})\\n"
+                        projects_info += f"   - Profil Risiko: {proj['profil_risiko']}\\n"
+                        projects_info += f"   - Durasi: {proj['durasi_tahun']} tahun\\n"
+                        projects_info += f"   - Nilai Investasi: Rp {proj['nilai_investasi_triliun']} triliun\\n"
+                        projects_info += f"   - Skor Kecocokan: {proj['skor_kecocokan_persen']}%\\n\\n"
+                
+                system_prompt = f"""
+Anda adalah seorang konsultan investasi KPBU yang sedang melanjutkan percakapan dengan {user_name if user_name else 'investor'}. 
+
+KONTEKS SEBELUMNYA:
+- Sesi chat dimulai pada: {session_data['created_at'].strftime('%Y-%m-%d %H:%M')}
+- Profil Investor: Toleransi Risiko: {investor_profile.get('toleransi_risiko')}, Horison: {investor_profile.get('horison_investasi')}, Ukuran: {investor_profile.get('ukuran_investasi')}
+
+{projects_info}
+
+Lanjutkan percakapan dengan profesional dan persuasif, selalu mengarahkan ke investasi KPBU.
+"""
+                
+                # Initialize new chat with context
+                chat = self.model.start_chat(history=[])
+                self.sessions[session_id]['chat'] = chat
+                
+                # Send context to warm up the chat
+                try:
+                    chat.send_message(system_prompt)
+                except:
+                    pass  # Continue even if context setup fails
+                
+            except Exception as e:
+                print(f"⚠️ Error restoring chat session {session_id}: {e}")
 
 # ===================== MATCHING ENGINE =====================
 class MatchingEngine:
@@ -922,13 +1032,46 @@ async def get_chat_session(
             "investor_profile": session_info['investor_profile'],
             "recommendations_count": len(session_info['recommendations']),
             "created_at": session_info['created_at'].isoformat(),
-            "user_name": session_info.get('user_name')
+            "last_activity": session_info.get('last_activity', session_info['created_at']).isoformat(),
+            "user_name": session_info.get('user_name'),
+            "is_active": session_info.get('chat') is not None
         }
         
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(500, f"Error retrieving chat session: {str(e)}")
+
+@app.get("/chat/sessions")
+async def get_all_chat_sessions(
+    token: str = Depends(verify_token)
+):
+    """Dapatkan daftar semua sesi chat yang aktif"""
+    try:
+        sessions_info = []
+        
+        for session_id, session in chatbot_engine.sessions.items():
+            sessions_info.append({
+                "session_id": session_id,
+                "user_name": session.get('user_name', 'Unknown'),
+                "toleransi_risiko": session['investor_profile'].get('toleransi_risiko'),
+                "created_at": session['created_at'].isoformat(),
+                "last_activity": session.get('last_activity', session['created_at']).isoformat(),
+                "recommendations_count": len(session['recommendations']),
+                "is_active": session.get('chat') is not None
+            })
+        
+        # Sort by last activity (most recent first)
+        sessions_info.sort(key=lambda x: x['last_activity'], reverse=True)
+        
+        return {
+            "success": True,
+            "total_sessions": len(sessions_info),
+            "sessions": sessions_info
+        }
+        
+    except Exception as e:
+        raise HTTPException(500, f"Error retrieving chat sessions: {str(e)}")
 
 @app.delete("/chat/cleanup")
 async def cleanup_chat_sessions(

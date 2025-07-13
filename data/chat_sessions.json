@@ -1,0 +1,60 @@
+{
+  "760d4304-baab-4e39-a93e-e98ab9552043": {
+    "investor_profile": {
+      "toleransi_risiko": "Konservatif",
+      "preferensi_sektor": [
+        1,
+        13
+      ],
+      "horison_investasi": "Jangka Pendek",
+      "ukuran_investasi": "Kecil",
+      "limit": 3
+    },
+    "recommendations": [
+      {
+        "ranking": 1,
+        "nama_proyek": "SPAM Kabupaten Karo",
+        "sektor": "Air dan Sanitasi",
+        "profil_risiko": "Rendah",
+        "durasi_tahun": 23,
+        "nilai_investasi_triliun": 0.11,
+        "skor_kecocokan_persen": 76.0,
+        "analisis_kecocokan": {
+          "sektor_match": true,
+          "horison_match": false,
+          "risiko_match": true
+        }
+      },
+      {
+        "ranking": 2,
+        "nama_proyek": "PJU Lombok Barat",
+        "sektor": "Konservasi Energi",
+        "profil_risiko": "Rendah",
+        "durasi_tahun": 21,
+        "nilai_investasi_triliun": 0.1,
+        "skor_kecocokan_persen": 40.0,
+        "analisis_kecocokan": {
+          "sektor_match": false,
+          "horison_match": false,
+          "risiko_match": true
+        }
+      },
+      {
+        "ranking": 3,
+        "nama_proyek": "Penerangan Jalan Umum Kabupaten Madiun",
+        "sektor": "Konservasi Energi",
+        "profil_risiko": "Rendah",
+        "durasi_tahun": 26,
+        "nilai_investasi_triliun": 0.1,
+        "skor_kecocokan_persen": 40.0,
+        "analisis_kecocokan": {
+          "sektor_match": false,
+          "horison_match": false,
+          "risiko_match": true
+        }
+      }
+    ],
+    "created_at": "2025-07-13T14:17:08.666210",
+    "user_name": "Test User"
+  }
+}

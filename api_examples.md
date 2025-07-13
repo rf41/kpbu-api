@@ -605,6 +605,42 @@ curl -X DELETE "http://localhost:8000/chat/cleanup" \
 }
 ```
 
+### Example 6: Get All Chat Sessions
+
+#### Request:
+```bash
+curl -X GET "http://localhost:8000/chat/sessions" \
+  -H "Authorization: Bearer kpbu-matchmaker-2025"
+```
+
+#### Response:
+```json
+{
+    "success": true,
+    "total_sessions": 3,
+    "sessions": [
+        {
+            "session_id": "04c08d9a-e720-4e91-9763-c3a9f5a77be9",
+            "user_name": "Budi Santoso",
+            "toleransi_risiko": "Moderat",
+            "created_at": "2025-07-13T10:30:00Z",
+            "last_activity": "2025-07-13T11:45:30Z",
+            "recommendations_count": 5,
+            "is_active": true
+        },
+        {
+            "session_id": "15d19e8b-f831-5a02-a874-c4b8e6f99cd0",
+            "user_name": "Siti Aminah",
+            "toleransi_risiko": "Konservatif",
+            "created_at": "2025-07-13T09:15:00Z",
+            "last_activity": "2025-07-13T10:20:15Z",
+            "recommendations_count": 3,
+            "is_active": false
+        }
+    ]
+}
+```
+
 ## CHATBOT cURL Commands
 
 ### Start Chat Session
