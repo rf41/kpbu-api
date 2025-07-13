@@ -110,7 +110,7 @@
 
 ### Example 1 - Konservatif
 ```bash
-curl -X POST "http://localhost:8000/match" \
+curl -X POST "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev//match" \
   -H "Authorization: Bearer kpbu-matchmaker-2025" \
   -H "Content-Type: application/json" \
   -d '{
@@ -124,7 +124,7 @@ curl -X POST "http://localhost:8000/match" \
 
 ### Example 2 - Moderat
 ```bash
-curl -X POST "http://localhost:8000/match" \
+curl -X POST "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev//match" \
   -H "Authorization: Bearer kpbu-matchmaker-2025" \
   -H "Content-Type: application/json" \
   -d '{
@@ -140,7 +140,7 @@ curl -X POST "http://localhost:8000/match" \
 
 #### Example 1 - Jalan Tol (Full Data)
 ```bash
-curl -X POST "http://localhost:8000/predict-risk" \
+curl -X POST "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev//predict-risk" \
   -H "Authorization: Bearer kpbu-matchmaker-2025" \
   -H "Content-Type: application/json" \
   -d '{
@@ -163,7 +163,7 @@ curl -X POST "http://localhost:8000/predict-risk" \
 
 #### Example 2 - Minimal Data
 ```bash
-curl -X POST "http://localhost:8000/predict-risk" \
+curl -X POST "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev//predict-risk" \
   -H "Authorization: Bearer kpbu-matchmaker-2025" \
   -H "Content-Type: application/json" \
   -d '{
@@ -177,13 +177,13 @@ curl -X POST "http://localhost:8000/predict-risk" \
 
 ### Get Available Sectors
 ```bash
-curl -X GET "http://localhost:8000/sectors" \
+curl -X GET "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev//sectors" \
   -H "Authorization: Bearer kpbu-matchmaker-2025"
 ```
 
 ### Health Check
 ```bash
-curl -X GET "http://localhost:8000/health"
+curl -X GET "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev//health"
 ```
 
 ## Mapping Sektor ID ke Nama
