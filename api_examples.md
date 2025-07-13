@@ -110,7 +110,7 @@
 
 ### Example 1 - Konservatif
 ```bash
-curl -X POST "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev//match" \
+curl -X POST "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev/match" \
   -H "Authorization: Bearer kpbu-matchmaker-2025" \
   -H "Content-Type: application/json" \
   -d '{
@@ -124,7 +124,7 @@ curl -X POST "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev//matc
 
 ### Example 2 - Moderat
 ```bash
-curl -X POST "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev//match" \
+curl -X POST "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev/match" \
   -H "Authorization: Bearer kpbu-matchmaker-2025" \
   -H "Content-Type: application/json" \
   -d '{
@@ -140,7 +140,7 @@ curl -X POST "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev//matc
 
 #### Example 1 - Jalan Tol (Full Data)
 ```bash
-curl -X POST "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev//predict-risk" \
+curl -X POST "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev/predict-risk" \
   -H "Authorization: Bearer kpbu-matchmaker-2025" \
   -H "Content-Type: application/json" \
   -d '{
@@ -163,7 +163,7 @@ curl -X POST "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev//pred
 
 #### Example 2 - Minimal Data
 ```bash
-curl -X POST "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev//predict-risk" \
+curl -X POST "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev/predict-risk" \
   -H "Authorization: Bearer kpbu-matchmaker-2025" \
   -H "Content-Type: application/json" \
   -d '{
@@ -177,13 +177,13 @@ curl -X POST "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev//pred
 
 ### Get Available Sectors
 ```bash
-curl -X GET "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev//sectors" \
+curl -X GET "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev/sectors" \
   -H "Authorization: Bearer kpbu-matchmaker-2025"
 ```
 
 ### Health Check
 ```bash
-curl -X GET "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev//health"
+curl -X GET "https://turbo-parakeet-v6qqq6qq4q66hx5gq-8000.app.github.dev/health"
 ```
 
 ## Mapping Sektor ID ke Nama
