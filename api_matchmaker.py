@@ -140,7 +140,7 @@ class DataLoader:
         """Konversi ID sektor ke nama sektor"""
         return [self.sektor_mapping.get(id_sektor) for id_sektor in sector_ids if id_sektor in self.sektor_mapping]
 
-# ===================== RISK PREDICTION ENGINE =====================
+# ===================== OPTIMIZED RISK PREDICTION ENGINE =====================
 class RiskPredictionEngine:
     def __init__(self):
         self.model = None
@@ -152,24 +152,25 @@ class RiskPredictionEngine:
         self.load_model()
     
     def load_model(self):
-        """Load pre-trained model dari joblib files"""
+        """Load optimized pre-trained model dari joblib files"""
         try:
+            # Prioritas untuk model yang dioptimasi
             model_files = {
-                'model': f'{MODEL_DIR}/risk_prediction_model.joblib',
-                'scaler': f'{MODEL_DIR}/risk_prediction_scaler.joblib',
-                'label_encoder': f'{MODEL_DIR}/risk_prediction_label_encoder.joblib',
-                'feature_columns': f'{MODEL_DIR}/risk_prediction_features.joblib',
+                'model': f'{MODEL_DIR}/optimized_risk_prediction_model.joblib',
+                'scaler': f'{MODEL_DIR}/optimized_risk_prediction_scaler.joblib',
+                'label_encoder': f'{MODEL_DIR}/optimized_risk_prediction_label_encoder.joblib',
+                'feature_columns': f'{MODEL_DIR}/optimized_risk_prediction_features.joblib',
                 'sector_reference': f'{MODEL_DIR}/sector_reference.joblib'
             }
             
-            # Check if all files exist
+            # Check if optimized files exist
             missing_files = [name for name, path in model_files.items() if not os.path.exists(path)]
             if missing_files:
-                print(f"⚠️  Missing model files: {missing_files}")
-                print("Please run 'python train_risk_model.py' first")
+                print(f"⚠️  Missing optimized model files: {missing_files}")
+                print("Please run 'python train_risk_model.py' to generate optimized models")
                 return
             
-            # Load model components
+            # Load optimized model components
             self.model = joblib.load(model_files['model'])
             self.scaler = joblib.load(model_files['scaler'])
             self.label_encoder = joblib.load(model_files['label_encoder'])
@@ -181,14 +182,44 @@ class RiskPredictionEngine:
                 self.df_sektor = None
             
             self.is_loaded = True
-            print("✅ Risk prediction model loaded successfully")
+            print("✅ Optimized risk prediction model loaded successfully")
             
         except Exception as e:
-            print(f"❌ Error loading risk prediction model: {e}")
+            print(f"❌ Error loading optimized risk prediction model: {e}")
             self.is_loaded = False
     
+    def apply_advanced_feature_engineering(self, X_df):
+        """Apply advanced feature engineering sesuai dengan train_risk_model.py"""
+        
+        # 1. Log transformation untuk nilai moneter
+        if 'Nilai_Token' in X_df.columns:
+            X_df['Nilai_Token_log'] = np.log1p(X_df['Nilai_Token'])
+            
+            # Binning nilai proyek berdasarkan kuartil (gunakan nilai default)
+            q1 = 50000000000  # 50B default Q1
+            q3 = 500000000000  # 500B default Q3
+            X_df['Nilai_Category_Small'] = (X_df['Nilai_Token'] < q1).astype(int)
+            X_df['Nilai_Category_Large'] = (X_df['Nilai_Token'] > q3).astype(int)
+        
+        # 2. Interaction features
+        if 'sektor_risk_score' in X_df.columns:
+            if 'Nilai_Token' in X_df.columns:
+                X_df['risk_value_interaction'] = X_df['sektor_risk_score'] * np.log1p(X_df['Nilai_Token'])
+            if 'id_status' in X_df.columns:
+                X_df['risk_status_interaction'] = X_df['sektor_risk_score'] * X_df['id_status']
+        
+        # 3. Squared terms untuk fitur numerik terpenting
+        numeric_cols = X_df.select_dtypes(include=[np.number]).columns
+        important_numeric = [col for col in numeric_cols if 'risk' in col.lower() or 'nilai' in col.lower()]
+        
+        if len(important_numeric) >= 1:
+            for col in important_numeric[:3]:  # Top 3 most important
+                X_df[f'{col}_squared'] = X_df[col] ** 2
+        
+        return X_df
+
     def preprocess_project_data(self, project_data: dict):
-        """Preprocess data proyek baru untuk prediksi"""
+        """Preprocess data proyek baru untuk prediksi dengan optimized pipeline"""
         # Convert ke DataFrame
         df = pd.DataFrame([project_data])
         
@@ -209,6 +240,14 @@ class RiskPredictionEngine:
             if col not in df.columns or df[col].isna().any():
                 df[col] = default_val
         
+        # Konversi nama kolom untuk konsistensi dengan training
+        column_mapping = {
+            'nilai_investasi_total_idr': 'Nilai_Token',
+            'jenis_token_utama': 'Jenis_Token_Utama'
+        }
+        
+        df = df.rename(columns=column_mapping)
+        
         # Konversi boolean ke int
         bool_columns = [
             'token_ada_jaminan_pokok', 'token_return_berbasis_kinerja',
@@ -226,7 +265,7 @@ class RiskPredictionEngine:
                 how='left'
             )
             
-            # Buat fitur tambahan berbasis risiko sektor
+            # Buat fitur tambahan berbasis risiko sektor (SAMA dengan training)
             df['sektor_risk_score'] = 15 - df['risk_rank'].fillna(8)
             df['sektor_risk_category'] = pd.cut(
                 df['risk_rank'].fillna(8), 
@@ -239,26 +278,17 @@ class RiskPredictionEngine:
         
         # Handle kolom kategorikal
         categorical_columns = []
-        possible_categorical = ['jenis_token_utama', 'sektor_risk_category']
+        possible_categorical = ['Jenis_Token_Utama', 'sektor_risk_category']
         
         for col in possible_categorical:
             if col in X.columns:
                 categorical_columns.append(col)
         
         if categorical_columns:
-            # Konversi nama kolom ke format yang konsisten dengan training
-            column_mapping = {
-                'jenis_token_utama': 'Jenis_Token_Utama',
-                'sektor_risk_category': 'sektor_risk_category'
-            }
-            
-            for old_col, new_col in column_mapping.items():
-                if old_col in X.columns:
-                    X = X.rename(columns={old_col: new_col})
-            
-            # Update categorical columns list
-            categorical_columns = [column_mapping.get(col, col) for col in categorical_columns]
             X = pd.get_dummies(X, columns=categorical_columns, drop_first=True)
+        
+        # Apply advanced feature engineering
+        X = self.apply_advanced_feature_engineering(X)
         
         # Reindex untuk konsistensi dengan training data
         X = X.reindex(columns=self.feature_columns, fill_value=0)
@@ -266,18 +296,18 @@ class RiskPredictionEngine:
         return X
     
     def predict_risk(self, project_data: dict):
-        """Prediksi risiko proyek baru"""
+        """Prediksi risiko proyek baru dengan optimized model"""
         if not self.is_loaded:
-            raise Exception("Model belum dimuat. Jalankan train_risk_model.py terlebih dahulu.")
+            raise Exception("Optimized model belum dimuat. Jalankan train_risk_model.py terlebih dahulu untuk generate optimized models.")
         
         try:
-            # Preprocess data
+            # Preprocess data dengan advanced pipeline
             X_processed = self.preprocess_project_data(project_data)
             
             # Scale features
             X_scaled = self.scaler.transform(X_processed)
             
-            # Prediksi
+            # Prediksi dengan optimized model
             prediction = self.model.predict(X_scaled)[0]
             probabilities = self.model.predict_proba(X_scaled)[0]
             
@@ -289,7 +319,11 @@ class RiskPredictionEngine:
             for i, label in enumerate(self.label_encoder.classes_):
                 prob_dict[label] = round(probabilities[i] * 100, 2)
             
-            # Analisis risiko sektor
+            # Enhanced confidence calculation
+            max_prob = max(probabilities)
+            confidence = round(max_prob * 100, 2)
+            
+            # Analisis risiko sektor dengan advanced metrics
             risk_analysis = {}
             if self.df_sektor is not None and 'id_sektor' in project_data:
                 sector_info = self.df_sektor[self.df_sektor['id_sektor'] == project_data['id_sektor']]
@@ -301,26 +335,41 @@ class RiskPredictionEngine:
                             'Sangat Tinggi' if risk_rank <= 3 else 
                             'Tinggi' if risk_rank <= 7 else 
                             'Menengah' if risk_rank <= 11 else 'Rendah'
+                        ),
+                        'sector_confidence_modifier': (
+                            1.1 if risk_rank <= 3 else
+                            1.05 if risk_rank <= 7 else
+                            1.0 if risk_rank <= 11 else 0.95
                         )
                     }
+                    
+                    # Adjust confidence based on sector risk
+                    confidence = min(95, confidence * risk_analysis['sector_confidence_modifier'])
+            
+            # Enhanced prediction quality indicator
+            entropy = -sum(p * np.log(p + 1e-10) for p in probabilities)
+            prediction_quality = "High" if entropy < 0.8 else "Medium" if entropy < 1.2 else "Low"
             
             return {
                 'predicted_risk': predicted_label,
-                'confidence': round(max(probabilities) * 100, 2),
+                'confidence': round(confidence, 2),
                 'probabilities': prob_dict,
-                'risk_analysis': risk_analysis
+                'risk_analysis': risk_analysis,
+                'prediction_quality': prediction_quality,
+                'model_version': 'optimized_v2.0',
+                'features_used': len(self.feature_columns)
             }
             
         except Exception as e:
-            raise Exception(f"Error in risk prediction: {str(e)}")
+            raise Exception(f"Error in optimized risk prediction: {str(e)}")
     
     def save_prediction_to_csv(self, project_dict: dict, prediction_result: dict):
-        """Simpan hasil prediksi ke CSV dataset untuk learning"""
+        """Simpan hasil prediksi ke CSV dataset untuk continuous learning"""
         try:
             # Path file untuk menyimpan data baru
-            new_data_path = "data/data_kpbu_with_predictions.csv"
+            new_data_path = "data/data_kpbu_with_predictions_optimized.csv"
             
-            # Prepare data untuk disimpan
+            # Prepare data untuk disimpan dengan enhanced features
             save_data = {
                 'nama_proyek': project_dict.get('nama_proyek'),
                 'id_sektor': project_dict.get('id_sektor'),
@@ -338,6 +387,9 @@ class RiskPredictionEngine:
                 'dok_peringkat_kredit': project_dict.get('dok_peringkat_kredit', False),
                 'predicted_risk': prediction_result['predicted_risk'],
                 'prediction_confidence': prediction_result['confidence'],
+                'prediction_quality': prediction_result.get('prediction_quality', 'Medium'),
+                'model_version': prediction_result.get('model_version', 'optimized_v2.0'),
+                'features_used': prediction_result.get('features_used', 0),
                 'prediction_timestamp': datetime.now().isoformat()
             }
             
@@ -359,7 +411,7 @@ class RiskPredictionEngine:
             return True, datetime.now().isoformat()
             
         except Exception as e:
-            print(f"Error saving prediction to CSV: {e}")
+            print(f"Error saving optimized prediction to CSV: {e}")
             return False, None
 
 # ===================== CHATBOT ENGINE =====================
