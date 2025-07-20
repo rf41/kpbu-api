@@ -22,7 +22,7 @@ warnings.filterwarnings('ignore')
 
 # ===================== KONFIGURASI =====================
 AUTH_TOKEN = "kpbu-matchmaker-2025"  # Token statis untuk prototyping
-DATA_PATH = "data/data_kpbu_with_token.csv"
+DATA_PATH = "data/data_kpbu.csv"
 MODEL_DIR = "model/saved_models"
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyAzRRl-ydj19ZSF9IJXILPlfNioAJp5mho")  # Set environment variable
 
@@ -457,7 +457,6 @@ TUGAS ANDA:
 6. Jika ditanya tentang risiko, berikan penjelasan yang seimbang namun tetap positif
 7. Gunakan data dan fakta untuk meyakinkan investor
 8. Berikan jawaban yang ringkas dan to the point dan jangan terlalu banyak basa-basi
-9. Proyek KPBU sudah di tokenisasi dengan minimal investasi 1 juta rupiah
 
 GAYA KOMUNIKASI:
 - Profesional

@@ -25,7 +25,7 @@ def train_and_save_risk_model():
     print("📋 Improvements: SMOTE, Feature Engineering, Hyperparameter Tuning, Cross-Validation")
     
     # Path files
-    data_path = 'data/data_kpbu_with_token.csv'
+    data_path = 'model/data/data_kpbu_with_token.csv'
     ref_sektor_path = 'model/data/ref_sektor.csv'
     model_dir = 'model/saved_models'
     

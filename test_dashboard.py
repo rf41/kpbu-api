@@ -15,40 +15,18 @@ HEADERS = {
 
 # ===================== DATA MAPPING =====================
 SEKTOR_MAPPING = {
-    1: "Air minum",
-    2: "Infrastruktur",
-    3: "Jalan",
-    4: "Kesehatan",
-    5: "Ketenagalistrikan",
-    6: "Fasilitas pendidikan, penelitian dan pengembangan",
-    7: "Telekomunikasi dan informatika",
-    8: "Transportasi",
-    9: "Bangunan negara antara lain gedung perkantoran, rumah negara dan sarana pendukung lainnya",
-    10: "Pemasyarakatan",
-    11: "Konservasi energi",
-    12: "Sumber daya air dan irigasi",
-    13: "Sistem pengelolaan air limbah terpusat",
-    14: "Sistem pengelolaan air limbah setempat",
-    15: "Sistem pengelolaan persampahan dan/atau limbah bahan berbahaya dan beracun",
-    16: "Minyak dan gas bumi dan energi terbarukan termasuk bio energi",
-    17: "Fasilitas perkotaan",
-    18: "Kawasan",
-    19: "Pariwisata",
-    20: "Fasilitas sarana olahraga, kesenian dan budaya",
-    21: "Perumahan rakyat"
+    1: "Air dan Sanitasi", 2: "Sumber Daya Air", 3: "Jalan dan Jembatan",
+    4: "Transportasi", 5: "Transportasi Darat", 6: "Transportasi Laut",
+    7: "Transportasi Udara", 8: "Infrastruktur", 9: "Telekomunikasi dan Informatika",
+    10: "Energi", 11: "Minyak dan Gas", 12: "Ketenagalistrikan",
+    13: "Kesehatan", 14: "Pendidikan", 15: "Pariwisata",
+    16: "Energi Terbarukan", 17: "Perumahan", 18: "Kawasan Industri"
 }
-
 
 STATUS_MAPPING = {
-    1: "Perencanaan",
-    2: "Penyiapan",
-    3: "Lelang",
-    5: "Penandatanganan dan Pembiayaan",
-    6: "Konstruksi",
-    7: "Operasi",
-    8: "Akhir Proyek"
+    1: "Perencanaan", 2: "Penyiapan", 3: "Transaksi",
+    4: "Penandatanganan Kontrak", 5: "Konstruksi", 6: "Operasi", 7: "Selesai/Berakhir"
 }
-
 
 # ===================== HELPER FUNCTIONS =====================
 def make_api_call(endpoint, method="GET", data=None):
