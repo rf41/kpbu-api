@@ -9,3 +9,6 @@ joblib==1.5.1
 google-generativeai==0.8.5
 streamlit>=1.28.0
 requests>=2.31.0
+# Additional requirements for the test dashboard
+streamlit>=1.28.0
+requests>=2.31.0
