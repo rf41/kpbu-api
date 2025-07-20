@@ -1,0 +1,58 @@
+ID_Proyek,Nama_Proyek,id_sektor,id_status,Durasi_Konsesi_Tahun,Nilai_Investasi_Total_IDR,Target_Dana_Tokenisasi_IDR,Persentase_Tokenisasi,Jenis_Token_Utama,Token_Risk_Level_Ordinal,Token_Ada_Jaminan_Pokok,Token_Return_Berbasis_Kinerja,Dok_Studi_Kelayakan,Dok_Laporan_Keuangan_Audit,Dok_Peringkat_Kredit,Profil_Risiko
+PROJ101,Jalan Tol Pandaan-Malang,3,7,35,6359000000000,1907700000000,0.30,Utang,1,1,0,TRUE,TRUE,TRUE,Rendah
+PROJ102,Jalan Tol Batang-Semarang,3,7,38,13968000000000,2793600000000,0.20,Utang,1,1,0,TRUE,TRUE,TRUE,Rendah
+PROJ103,Optimalisasi Saluran Irigasi Komering,1,2,22,1733000000000,953150000000,0.55,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ104,Bendungan Bodri,1,2,25,1744000000000,872000000000,0.50,Hibrida,2,1,1,TRUE,FALSE,FALSE,Menengah
+PROJ105,Optimalisasi HLD Sungai Lombok,1,2,28,1578000000000,1025700000000,0.65,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ106,PJU Lombok Barat,11,6,21,95000000000,42750000000,0.45,Hak Pendapatan,3,0,1,TRUE,FALSE,FALSE,Menengah
+PROJ107,Tol JORR Elevated Cikunir-Ulujami,3,6,39,21266000000000,8506400000000,0.40,Hibrida,2,1,1,TRUE,FALSE,TRUE,Menengah
+PROJ108,Jalan Trans Papua Ruas Jayapura-Wamena (Segmen Mamberamo-Elelim),3,6,33,3600000000000,2340000000000,0.65,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ109,Penggantian dan/atau Duplikasi Jembatan CH,3,7,30,2199000000000,439800000000,0.20,Utang,1,1,0,TRUE,TRUE,TRUE,Rendah
+PROJ110,Penerangan Jalan Umum Kabupaten Madiun,11,7,26,100000000000,35000000000,0.35,Hak Pendapatan,3,0,1,TRUE,TRUE,FALSE,Menengah
+PROJ111,Jalan Tol Semarang-Demak,3,7,37,5440000000000,1360000000000,0.25,Utang,1,1,0,TRUE,TRUE,TRUE,Rendah
+PROJ112,Jalan Tol Serang-Panimbang,3,7,40,8575000000000,1715000000000,0.20,Utang,1,1,0,TRUE,TRUE,TRUE,Rendah
+PROJ113,PLTU Batang - Jawa Tengah,2,7,32,60556000000000,9083400000000,0.15,Utang,1,1,0,TRUE,TRUE,TRUE,Rendah
+PROJ114,Jalan Tol Balikpapan-Samarinda,3,7,36,11889000000000,3566700000000,0.30,Utang,1,1,0,TRUE,TRUE,FALSE,Rendah
+PROJ115,Jalan Tol Manado-Bitung,3,7,34,4948000000000,1237000000000,0.25,Hibrida,2,1,1,TRUE,TRUE,TRUE,Menengah
+PROJ116,Jalan Tol Kediri-Tulungagung,3,6,31,10256000000000,4102400000000,0.40,Hibrida,2,1,1,TRUE,FALSE,TRUE,Menengah
+PROJ117,Jalan Tol Akses Pelabuhan Patimban,4,6,35,5020000000000,2008000000000,0.40,Hibrida,2,1,1,TRUE,FALSE,TRUE,Menengah
+PROJ118,SPAM Regional Karian-Serpong,1,6,29,2432000000000,1216000000000,0.50,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ119,Jalan Tol Yogyakarta-Bawen,3,6,38,14255000000000,6414750000000,0.45,Hibrida,2,1,1,TRUE,FALSE,FALSE,Menengah
+PROJ120,SPAM Regional Jatiluhur I,1,6,27,1675000000000,921250000000,0.55,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ121,Jalan Tol Solo-Yogyakarta-Kulonprogo,3,6,39,26636000000000,11986200000000,0.45,Hibrida,2,1,1,TRUE,FALSE,TRUE,Menengah
+PROJ122,Fasilitas Pemanfaatan BMN pada Ibu Kota Lama,16,2,22,5000000000000,3000000000000,0.60,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ123,Fasilitas Pendukung Penerapan Skema Pendanaan,16,2,24,6000000000000,3900000000000,0.65,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ124,Fasilitas Pengembangan Proyek - Tahap 2,16,2,25,7000000000000,4200000000000,0.60,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ125,Fasilitas Pengembangan Proyek - Tahap I,16,2,26,7500000000000,4875000000000,0.65,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ126,Revitalisasi Pasar Tabanan,16,2,20,655512000000,393307200000,0.60,Hak Pendapatan,3,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ127,SPAM Kabupaten Karo,1,2,23,110000000000,60500000000,0.55,Hibrida,2,1,1,TRUE,FALSE,FALSE,Menengah
+PROJ128,RSUD Wangaya,13,2,28,586869000000,322777950000,0.55,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ129,Proyek Perkeretaapian Perkotaan Metropolitan Bandung,6,2,33,5171117000000,2844114350000,0.55,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ130,Pengelolaan dan Pembangunan Armada Kapal Riset Nasional,14,2,30,3808000000000,1523200000000,0.40,Hibrida,2,1,1,TRUE,FALSE,FALSE,Menengah
+PROJ131,Pengembangan Rumah Sakit Inche Abdoel Moeis Kota Samarinda,13,3,29,808541687435,485125012461,0.60,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ132,Sistem Penyediaan Air Minum Kota Denpasar,1,2,25,808675299819,444771414900,0.55,Hibrida,2,1,1,TRUE,FALSE,FALSE,Menengah
+PROJ133,Rumah Sakit Pendidikan Universitas Padjadjaran,14,2,27,494700000000,272085000000,0.55,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ134,Pembangunan Jaringan Distribusi Gas Bumi untuk Rumah Tangga Dengan Skema KPBU Kota Palembang,12,2,26,3200000000000,1760000000000,0.55,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ135,Sistem Penyediaan Air Minum Umbulan,1,7,35,2390000000000,597500000000,0.25,Hibrida,2,1,1,TRUE,TRUE,TRUE,Menengah
+PROJ136,Tempat Pemrosesan dan Pengolahan Akhir Sampah Manggar,10,2,22,492000000000,295200000000,0.60,Hak Pendapatan,3,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ137,Rumah Susun Sewa Karawang Spuur,15,2,24,403000000000,241800000000,0.60,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ138,BPLJSKB Proving Ground Bekasi,8,6,31,1740000000000,696000000000,0.40,Hibrida,2,1,1,TRUE,FALSE,TRUE,Menengah
+PROJ139,Bandar Udara Singkawang,5,3,36,4500000000000,2475000000000,0.55,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ140,Proyek KPBU Bendungan Merangin Terintegrasi SPAM,1,2,29,4770000000000,2623500000000,0.55,Hibrida,2,1,1,TRUE,FALSE,FALSE,Menengah
+PROJ141,SPAM Regional Jatigede,1,2,28,2039000000000,1121450000000,0.55,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi
+PROJ142,Preservasi Jalan Nasional Lintas Timur Sumatera di Provinsi Riau,3,7,30,525500000000,131375000000,0.25,Utang,1,1,0,TRUE,TRUE,TRUE,Rendah
+PROJ143,Palapa Ring Paket Barat,9,7,25,1228600000000,307150000000,0.25,Hibrida,2,1,1,TRUE,TRUE,TRUE,Menengah
+PROJ144,Jalan Tol Jakarta Cikampek Selatan,3,6,37,12564042368497,5025616947399,0.40,Hibrida,2,1,1,TRUE,FALSE,TRUE,Menengah
+PROJ145,Jalan Tol Cileunyi Sumedang Dawuan,3,7,35,5781000000000,1156200000000,0.20,Utang,1,1,0,TRUE,TRUE,TRUE,Rendah
+PROJ146,Jalan Tol Krian Legundi Bunder Manyar,3,7,36,9017644000000,2254411000000,0.25,Utang,1,1,0,TRUE,TRUE,TRUE,Rendah
+PROJ147,Palapa Ring Paket Timur,9,7,28,5087900000000,1271975000000,0.25,Hibrida,2,1,1,TRUE,TRUE,TRUE,Menengah
+PROJ148,Palapa Ring Paket Tengah,9,7,27,1093398654266,273349663567,0.25,Hibrida,2,1,1,TRUE,TRUE,TRUE,Menengah
+PROJ149,SPAM Kota Bandar Lampung,1,7,32,750000000000,225000000000,0.30,Hibrida,2,1,1,TRUE,TRUE,TRUE,Menengah
+PROJ150,Proyek KPBU SPAM Semarang Barat,1,7,33,417300000000,125190000000,0.30,Hibrida,2,1,1,TRUE,TRUE,TRUE,Menengah
+PROJ151,Preservasi Jalan Nasional Lintas Timur Sumatera di Provinsi Sumatera Selatan,3,7,30,1350000000000,337500000000,0.25,Utang,1,1,0,TRUE,TRUE,TRUE,Rendah
+PROJ152,Proyek Satelit Multifungsi,9,7,25,6420800000000,1605200000000,0.25,Hibrida,2,1,1,TRUE,TRUE,TRUE,Menengah
+PROJ153,Perkeretaapian Makassar-Parepare,6,7,34,988500000000,296550000000,0.30,Hibrida,2,1,1,TRUE,TRUE,FALSE,Menengah
+PROJ154,Jalan Tol Probolinggo-Banyuwangi,3,6,39,21070000000000,8428000000000,0.40,Hibrida,2,1,1,TRUE,FALSE,TRUE,Menengah
+PROJ155,Jalan Tol Jakarta Cikampek II Elevated,3,7,38,14773554000000,2954710800000,0.20,Utang,1,1,0,TRUE,TRUE,TRUE,Rendah
+PROJ156,SPAM Kota Pekanbaru,1,7,31,499500000000,149850000000,0.30,Hibrida,2,1,1,TRUE,TRUE,TRUE,Menengah
+PROJ157,Pembangunan Tempat Pengolahan dan Pemrosesan Akhir Sampah (TPPAS) Regional Legok Nangka,10,4,29,4000000000000,2200000000000,0.55,Ekuitas,4,0,1,TRUE,FALSE,FALSE,Tinggi

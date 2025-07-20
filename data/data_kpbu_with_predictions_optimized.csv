@@ -1,0 +1,9 @@
+nama_proyek,id_sektor,id_status,durasi_konsesi_tahun,nilai_investasi_total_idr,target_dana_tokenisasi_idr,persentase_tokenisasi,jenis_token_utama,token_risk_level_ordinal,token_ada_jaminan_pokok,token_return_berbasis_kinerja,dok_studi_kelayakan,dok_laporan_keuangan_audit,dok_peringkat_kredit,predicted_risk,prediction_confidence,prediction_quality,model_version,features_used,prediction_timestamp
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3,False,True,True,True,False,Tinggi,56.5,Medium,optimized_v2.0,15,2025-07-16T03:26:02.729531
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,35.89999999999999,Infrastruktur,3,False,True,True,True,False,Tinggi,56.5,Medium,optimized_v2.0,15,2025-07-16T03:26:08.480359
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,35.89999999999999,Infrastruktur,3,False,True,False,True,False,Tinggi,56.5,Medium,optimized_v2.0,15,2025-07-16T03:26:13.340265
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,35.89999999999999,Infrastruktur,3,False,True,True,True,False,Tinggi,56.5,Medium,optimized_v2.0,15,2025-07-16T03:26:16.042368
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,35.89999999999999,Infrastruktur,3,False,True,True,True,False,Tinggi,56.5,Medium,optimized_v2.0,15,2025-07-16T03:26:16.786250
+Jalan Tol Jakarta-Bandung,2,3,25,5500000000000.0,2000000000000.0,35.89999999999999,Infrastruktur,3,False,True,True,True,False,Tinggi,51.02,Medium,optimized_v2.0,15,2025-07-16T03:26:21.250883
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3,False,True,True,True,False,Tinggi,56.5,Medium,optimized_v2.0,15,2025-07-16T03:42:27.658100
+Jalan Tol Jakarta-Bandung,3,7,25,5999999999999.0,2000000000000.0,35.99999999999999,Infrastruktur,1,False,True,True,True,False,Menengah,57.93,Medium,optimized_v2.0,15,2025-07-16T03:47:14.692937
