@@ -1,0 +1,22 @@
+nama_proyek,id_sektor,id_status,durasi_konsesi_tahun,nilai_investasi_total_idr,target_dana_tokenisasi_idr,persentase_tokenisasi,jenis_token_utama,token_risk_level_ordinal,token_ada_jaminan_pokok,token_return_berbasis_kinerja,dok_studi_kelayakan,dok_laporan_keuangan_audit,dok_peringkat_kredit,predicted_risk,prediction_confidence,prediction_timestamp
+Jalan Tol Jakarta-Bandung Test,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,,,,,,,Rendah,67.03,2025-07-13T13:55:38.105491
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3.0,0.0,1.0,1.0,1.0,0.0,Rendah,68.06,2025-07-13T14:22:07.796632
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3.0,0.0,1.0,1.0,1.0,0.0,Rendah,68.06,2025-07-13T14:52:36.368108
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3.0,0.0,1.0,1.0,1.0,0.0,Rendah,68.06,2025-07-13T14:54:08.128229
+Proyek Test KPBU,3,3,25,5000000000000.0,,,,,,,,,,Rendah,68.06,2025-07-15T14:07:13.680936
+Proyek Test KPBU,6,1,15,4800000000000.0,,,,,,,,,,Rendah,62.79,2025-07-15T14:07:30.192090
+Proyek Test KPBU,6,1,1,4800000000000.0,,,,,,,,,,Rendah,62.79,2025-07-15T14:07:37.491199
+Proyek Test KPBU,6,1,1,4800000000000.0,,,,,,,,,,Rendah,62.79,2025-07-15T14:07:38.739916
+Proyek Test KPBU,6,1,1,5000000000000.0,,,,,,,,,,Rendah,62.79,2025-07-15T14:07:40.860796
+Proyek Test KPBU,6,6,1,5000000000000.0,,,,,,,,,,Rendah,70.58,2025-07-15T14:07:43.724681
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3.0,0.0,1.0,1.0,1.0,0.0,Rendah,68.06,2025-07-15T14:10:48.451635
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3.0,0.0,0.0,0.0,0.0,0.0,Rendah,68.06,2025-07-15T14:10:52.467882
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3.0,0.0,0.0,0.0,0.0,0.0,Rendah,68.06,2025-07-15T14:10:53.661661
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Transportasi,3.0,0.0,0.0,0.0,0.0,0.0,Rendah,68.06,2025-07-15T14:10:56.241904
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Pendidikan,3.0,0.0,0.0,0.0,0.0,0.0,Rendah,68.06,2025-07-15T14:10:59.968875
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,1799999999999.0,100.0,Pendidikan,3.0,0.0,0.0,0.0,0.0,0.0,Rendah,68.06,2025-07-15T14:11:07.243426
+Jalan Tol Jakarta-Bandung,3,3,15,5500000000000.0,1799999999999.0,100.0,Pendidikan,3.0,0.0,0.0,0.0,0.0,0.0,Rendah,68.06,2025-07-15T14:11:12.898068
+Jalan Tol Jakarta-Bandung,5,3,15,5500000000000.0,1799999999999.0,100.0,Pendidikan,3.0,0.0,0.0,0.0,0.0,0.0,Rendah,67.0,2025-07-15T14:11:16.817752
+Jalan Tol Jakarta-Bandung,16,3,15,5500000000000.0,1799999999999.0,100.0,Pendidikan,3.0,0.0,0.0,0.0,0.0,0.0,Rendah,61.07,2025-07-15T14:11:23.284578
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3.0,0.0,1.0,1.0,1.0,0.0,Rendah,68.06,2025-07-15T14:38:53.876550
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Energi,3.0,0.0,1.0,1.0,1.0,0.0,Rendah,68.06,2025-07-15T14:38:57.876533
