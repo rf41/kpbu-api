@@ -15,7 +15,7 @@ HEADERS = {
 
 # ===================== DATA MAPPING =====================
 SEKTOR_MAPPING = {
-1: "Air minum",
+            1: "Air minum",
             2: "Infrastruktur", 
             3: "Jalan",
             4: "Kesehatan",
@@ -35,7 +35,9 @@ SEKTOR_MAPPING = {
             18: "Kawasan",
             19: "Pariwisata",
             20: "Fasilitas sarana olahraga, kesenian dan budaya",
-            21: "Perumahan rakyat"}
+            21: "Perumahan rakyat"
+}
+
 
 STATUS_MAPPING = {
     1: "Perencanaan", 2: "Penyiapan", 3: "Transaksi",
