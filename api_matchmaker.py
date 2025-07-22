@@ -113,12 +113,27 @@ class DataLoader:
     def __init__(self):
         self.df_proyek = None
         self.sektor_mapping = {
-            1: 'Air dan Sanitasi', 2: 'Infrastruktur', 3: 'Jalan dan Jembatan',
-            4: 'Transportasi Laut', 5: 'Transportasi Udara', 6: 'Transportasi Darat',
-            7: 'Telekomunikasi', 8: 'Transportasi', 9: 'Telekomunikasi dan Informatika',
-            10: 'Pengelolaan Sampah', 11: 'Konservasi Energi', 12: 'Sumber Daya Air',
-            13: 'Kesehatan', 14: 'Penelitian dan Pengembangan', 15: 'Perumahan',
-            16: 'Energi Terbarukan'
+            1: "Air minum",
+            2: "Infrastruktur", 
+            3: "Jalan",
+            4: "Kesehatan",
+            5: "Ketenagalistrikan",
+            6: "Fasilitas pendidikan, penelitian dan pengembangan",
+            7: "Telekomunikasi dan informatika",
+            8: "Transportasi",
+            9: "Bangunan negara antara lain gedung perkantoran, rumah negara dan sarana pendukung lainnya",
+            10: "Pemasyarakatan",
+            11: "Konservasi energi",
+            12: "Sumber daya air dan irigasi",
+            13: "Sistem pengelolaan air limbah terpusat",
+            14: "Sistem pengelolaan air limbah setempat",
+            15: "Sistem pengelolaan persampahan dan/atau limbah bahan berbahaya dan beracun",
+            16: "Minyak dan gas bumi dan energi terbarukan termasuk bio energi",
+            17: "Fasilitas perkotaan",
+            18: "Kawasan",
+            19: "Pariwisata",
+            20: "Fasilitas sarana olahraga, kesenian dan budaya",
+            21: "Perumahan rakyat"
         }
         self.load_data()
     
@@ -140,41 +155,53 @@ class DataLoader:
         """Konversi ID sektor ke nama sektor"""
         return [self.sektor_mapping.get(id_sektor) for id_sektor in sector_ids if id_sektor in self.sektor_mapping]
 
-# ===================== OPTIMIZED RISK PREDICTION ENGINE =====================
+# ===================== DOMAIN ENHANCED RISK PREDICTION ENGINE =====================
 class RiskPredictionEngine:
     def __init__(self):
         self.model = None
         self.scaler = None
         self.label_encoder = None
         self.feature_columns = None
+        self.domain_risk_weights = None
+        self.model_metadata = None
         self.df_sektor = None
         self.is_loaded = False
         self.load_model()
     
     def load_model(self):
-        """Load optimized pre-trained model dari joblib files"""
+        """Load domain enhanced pre-trained model dari joblib files"""
         try:
-            # Prioritas untuk model yang dioptimasi
+            # Prioritas untuk model domain enhanced terbaru
             model_files = {
-                'model': f'{MODEL_DIR}/optimized_risk_prediction_model.joblib',
-                'scaler': f'{MODEL_DIR}/optimized_risk_prediction_scaler.joblib',
-                'label_encoder': f'{MODEL_DIR}/optimized_risk_prediction_label_encoder.joblib',
-                'feature_columns': f'{MODEL_DIR}/optimized_risk_prediction_features.joblib',
+                'model': f'{MODEL_DIR}/domain_enhanced_risk_model.joblib',
+                'scaler': f'{MODEL_DIR}/domain_enhanced_scaler.joblib',
+                'label_encoder': f'{MODEL_DIR}/domain_enhanced_label_encoder.joblib',
+                'feature_columns': f'{MODEL_DIR}/domain_enhanced_features.joblib',
+                'domain_risk_weights': f'{MODEL_DIR}/domain_risk_weights.joblib',
+                'metadata': f'{MODEL_DIR}/domain_enhanced_metadata.joblib',
                 'sector_reference': f'{MODEL_DIR}/sector_reference.joblib'
             }
             
-            # Check if optimized files exist
-            missing_files = [name for name, path in model_files.items() if not os.path.exists(path)]
-            if missing_files:
-                print(f"⚠️  Missing optimized model files: {missing_files}")
-                print("Please run 'python train_risk_model.py' to generate optimized models")
+            # Check if domain enhanced files exist (sector_reference is optional)
+            required_files = ['model', 'scaler', 'label_encoder', 'feature_columns', 'domain_risk_weights']
+            missing_required = [name for name in required_files if not os.path.exists(model_files[name])]
+            
+            if missing_required:
+                print(f"⚠️  Missing domain enhanced model files: {missing_required}")
+                print("Please run 'python train_risk_model_enhanced.py' to generate domain enhanced models")
                 return
             
-            # Load optimized model components
+            # Load domain enhanced model components
             self.model = joblib.load(model_files['model'])
             self.scaler = joblib.load(model_files['scaler'])
             self.label_encoder = joblib.load(model_files['label_encoder'])
             self.feature_columns = joblib.load(model_files['feature_columns'])
+            self.domain_risk_weights = joblib.load(model_files['domain_risk_weights'])
+            
+            try:
+                self.model_metadata = joblib.load(model_files['metadata'])
+            except:
+                self.model_metadata = None
             
             try:
                 self.df_sektor = joblib.load(model_files['sector_reference'])
@@ -182,44 +209,168 @@ class RiskPredictionEngine:
                 self.df_sektor = None
             
             self.is_loaded = True
-            print("✅ Optimized risk prediction model loaded successfully")
+            model_version = self.model_metadata.get('version', 'domain_enhanced_v3.0') if self.model_metadata else 'domain_enhanced_v3.0'
+            print(f"✅ Domain enhanced risk prediction model loaded successfully (version: {model_version})")
             
         except Exception as e:
-            print(f"❌ Error loading optimized risk prediction model: {e}")
+            print(f"❌ Error loading domain enhanced risk prediction model: {e}")
             self.is_loaded = False
     
-    def apply_advanced_feature_engineering(self, X_df):
-        """Apply advanced feature engineering sesuai dengan train_risk_model.py"""
+    def apply_domain_knowledge_features(self, df, lookup_weights):
+        """Apply domain knowledge features berdasarkan risk weights"""
+        if lookup_weights is None:
+            print("⚠️ Domain risk weights not loaded, using basic fallback features")
+            # Basic fallback features
+            df['basic_sektor_risk'] = df['id_sektor'].apply(lambda x: 0.5)
+            df['basic_status_risk'] = df['id_status'].apply(lambda x: 1.0) 
+            df['basic_duration_risk'] = df['Durasi_Konsesi_Tahun'].apply(
+                lambda x: 0.7 if x <= 20 else 0.9 if x <= 30 else 1.1
+            )
+            return df
         
-        # 1. Log transformation untuk nilai moneter
-        if 'Nilai_Token' in X_df.columns:
-            X_df['Nilai_Token_log'] = np.log1p(X_df['Nilai_Token'])
-            
-            # Binning nilai proyek berdasarkan kuartil (gunakan nilai default)
-            q1 = 50000000000  # 50B default Q1
-            q3 = 500000000000  # 500B default Q3
-            X_df['Nilai_Category_Small'] = (X_df['Nilai_Token'] < q1).astype(int)
-            X_df['Nilai_Category_Large'] = (X_df['Nilai_Token'] > q3).astype(int)
+        print("🧠 Applying domain knowledge features...")
         
-        # 2. Interaction features
-        if 'sektor_risk_score' in X_df.columns:
-            if 'Nilai_Token' in X_df.columns:
-                X_df['risk_value_interaction'] = X_df['sektor_risk_score'] * np.log1p(X_df['Nilai_Token'])
-            if 'id_status' in X_df.columns:
-                X_df['risk_status_interaction'] = X_df['sektor_risk_score'] * X_df['id_status']
+        # 1. Sektor Risk Score dari domain knowledge
+        df['dk_sektor_risk_score'] = df['id_sektor'].map(
+            lambda x: lookup_weights['sektor_weights'].get(str(x), {}).get('risk_score', 0.32)
+        )
         
-        # 3. Squared terms untuk fitur numerik terpenting
-        numeric_cols = X_df.select_dtypes(include=[np.number]).columns
-        important_numeric = [col for col in numeric_cols if 'risk' in col.lower() or 'nilai' in col.lower()]
+        # 2. Status Risk Score dari domain knowledge  
+        df['dk_status_risk_score'] = df['id_status'].map(
+            lambda x: lookup_weights['status_weights'].get(str(x), {}).get('risk_score', 1.0)
+        )
         
-        if len(important_numeric) >= 1:
-            for col in important_numeric[:3]:  # Top 3 most important
-                X_df[f'{col}_squared'] = X_df[col] ** 2
+        # 3. Duration Risk Score berdasarkan durasi konsesi
+        def get_duration_risk_score(duration):
+            if duration < 10:
+                return 1.18  # Kurang dari 10 tahun
+            elif duration <= 20:
+                return 0.71  # 10-20 tahun
+            elif duration <= 30:
+                return 0.47  # 21-30 tahun
+            elif duration <= 40:
+                return 0.71  # 31-40 tahun
+            else:
+                return 0.94  # Lebih dari 40 tahun
+        
+        df['dk_duration_risk_score'] = df['Durasi_Konsesi_Tahun'].apply(get_duration_risk_score)
+        
+        # 4. Investment Risk Score berdasarkan nilai investasi
+        def get_investment_risk_score(investment):
+            if investment < 50e9:  # < 50 miliar
+                return 0.88
+            elif investment < 250e9:  # 50M - 250M
+                return 0.53
+            elif investment < 1e12:  # 250M - 1T
+                return 0.35
+            elif investment < 5e12:  # 1T - 5T
+                return 0.53
+            else:  # >= 5T
+                return 0.71
+        
+        df['dk_investment_risk_score'] = df['Nilai_Investasi_Total_IDR'].apply(get_investment_risk_score)
+        
+        # 5. Token Type Risk Score
+        token_type_mapping = {
+            'Asset-Backed Token (ABT)': 0.56,
+            'Revenue-Sharing Token (RST)': 1.13,
+            'Profit-Sharing Token': 1.69,
+            'Availability Payment Token': 1.13,
+            'Hybrid Token (gabungan RST + ABT)': 1.69,
+            'Utility Token': 2.81,
+            'Utang': 0.56,  # Map ke ABT equivalent
+            'Ekuitas': 1.69,  # Map ke Profit-Sharing equivalent
+            'Hibrida': 1.69,  # Map ke Hybrid equivalent
+            'Hak Pendapatan': 1.13,  # Map ke Revenue-Sharing equivalent
+            'Tidak Ditentukan': 1.5  # Default medium risk
+        }
+        
+        df['dk_token_type_risk_score'] = df['Jenis_Token_Utama'].map(
+            lambda x: token_type_mapping.get(x, 1.5)  # Default medium risk
+        )
+        
+        # 6. Token Risk Level Score dari ordinal
+        risk_level_scores = {1: 0.6, 2: 1.2, 3: 1.8, 4: 2.4, 5: 3.0}
+        df['dk_token_risk_level_score'] = df['token_risk_level_ordinal'].map(
+            lambda x: risk_level_scores.get(x, 1.8)
+        )
+        
+        # 7. Characteristics Risk Scores
+        df['dk_jaminan_pokok_risk'] = df['token_ada_jaminan_pokok'].apply(
+            lambda x: 0 if x == 1 else 20.0  # Jika ada jaminan, risk berkurang
+        )
+        
+        df['dk_return_kinerja_risk'] = df['token_return_berbasis_kinerja'].apply(
+            lambda x: 10.0 if x == 1 else 0  # Return berbasis kinerja = lebih berisiko
+        )
+        
+        df['dk_studi_kelayakan_risk'] = df['dok_studi_kelayakan'].apply(
+            lambda x: 0 if x else 10.0  # Tidak ada studi kelayakan = berisiko
+        )
+        
+        df['dk_audit_keuangan_risk'] = df['dok_laporan_keuangan_audit'].apply(
+            lambda x: 0 if x else 10.0  # Tidak ada audit = berisiko
+        )
+        
+        # 8. Composite Domain Knowledge Risk Score
+        df['dk_composite_risk_score'] = (
+            df['dk_sektor_risk_score'] * 0.07 +
+            df['dk_status_risk_score'] * 0.06 +
+            df['dk_duration_risk_score'] * 0.04 +
+            df['dk_investment_risk_score'] * 0.03 +
+            df['dk_token_type_risk_score'] * 0.09 +
+            df['dk_token_risk_level_score'] * 0.09 +
+            (df['dk_jaminan_pokok_risk'] + df['dk_return_kinerja_risk'] + 
+             df['dk_studi_kelayakan_risk'] + df['dk_audit_keuangan_risk']) * 0.5
+        )
+        
+        # 9. Risk Interaction Features
+        df['dk_sektor_status_interaction'] = df['dk_sektor_risk_score'] * df['dk_status_risk_score']
+        df['dk_investment_tokenization_interaction'] = df['dk_investment_risk_score'] * df['persentase_tokenisasi']
+        df['dk_risk_level_documentation_interaction'] = df['dk_token_risk_level_score'] * (
+            df['dok_studi_kelayakan'].astype(int) + df['dok_laporan_keuangan_audit'].astype(int)
+        )
+        
+        print(f"✅ Added 14 domain knowledge features")
+        return df
+
+    def apply_enhanced_feature_engineering(self, X_df):
+        """Apply enhanced feature engineering dengan domain knowledge integration"""
+        
+        # Apply domain knowledge features first
+        X_df = self.apply_domain_knowledge_features(X_df, self.domain_risk_weights)
+        
+        # Advanced financial ratios
+        if 'target_dana_tokenisasi_idr' in X_df.columns and 'Nilai_Investasi_Total_IDR' in X_df.columns:
+            X_df['tokenization_ratio'] = X_df['target_dana_tokenisasi_idr'] / X_df['Nilai_Investasi_Total_IDR']
+            X_df['investment_log'] = np.log1p(X_df['Nilai_Investasi_Total_IDR'])
+            X_df['tokenization_log'] = np.log1p(X_df['target_dana_tokenisasi_idr'])
+        
+        # Risk concentration features (dengan fallback)
+        if 'dk_composite_risk_score' in X_df.columns:
+            X_df['high_risk_concentration'] = (
+                (X_df['token_risk_level_ordinal'] >= 4).astype(int) +
+                (X_df['persentase_tokenisasi'] >= 0.5).astype(int) +
+                (X_df['dk_composite_risk_score'] >= X_df['dk_composite_risk_score'].median()).astype(int)
+            )
+        else:
+            # Fallback tanpa domain knowledge
+            X_df['high_risk_concentration'] = (
+                (X_df['token_risk_level_ordinal'] >= 4).astype(int) +
+                (X_df['persentase_tokenisasi'] >= 0.5).astype(int)
+            )
+        
+        # Documentation completeness score
+        X_df['documentation_completeness'] = (
+            X_df['dok_studi_kelayakan'].astype(int) +
+            X_df['dok_laporan_keuangan_audit'].astype(int) +
+            X_df['dok_peringkat_kredit'].astype(int)
+        )
         
         return X_df
 
     def preprocess_project_data(self, project_data: dict):
-        """Preprocess data proyek baru untuk prediksi dengan optimized pipeline"""
+        """Preprocess data proyek baru untuk prediksi dengan domain enhanced pipeline"""
         # Convert ke DataFrame
         df = pd.DataFrame([project_data])
         
@@ -242,8 +393,9 @@ class RiskPredictionEngine:
         
         # Konversi nama kolom untuk konsistensi dengan training
         column_mapping = {
-            'nilai_investasi_total_idr': 'Nilai_Token',
-            'jenis_token_utama': 'Jenis_Token_Utama'
+            'nilai_investasi_total_idr': 'Nilai_Investasi_Total_IDR',
+            'jenis_token_utama': 'Jenis_Token_Utama',
+            'durasi_konsesi_tahun': 'Durasi_Konsesi_Tahun'
         }
         
         df = df.rename(columns=column_mapping)
@@ -273,10 +425,13 @@ class RiskPredictionEngine:
                 labels=['Sangat_Tinggi', 'Tinggi', 'Menengah', 'Rendah']
             )
         
-        # Drop kolom yang tidak diperlukan
+        # Drop kolom yang tidak diperlukan SEBELUM apply domain knowledge
         X = df.drop(['nama_proyek'], axis=1, errors='ignore')
         
-        # Handle kolom kategorikal
+        # Apply enhanced feature engineering dengan domain knowledge SEBELUM get_dummies
+        X = self.apply_enhanced_feature_engineering(X)
+        
+        # Handle kolom kategorikal SETELAH domain knowledge features dibuat
         categorical_columns = []
         possible_categorical = ['Jenis_Token_Utama', 'sektor_risk_category']
         
@@ -287,27 +442,24 @@ class RiskPredictionEngine:
         if categorical_columns:
             X = pd.get_dummies(X, columns=categorical_columns, drop_first=True)
         
-        # Apply advanced feature engineering
-        X = self.apply_advanced_feature_engineering(X)
-        
         # Reindex untuk konsistensi dengan training data
         X = X.reindex(columns=self.feature_columns, fill_value=0)
         
         return X
     
     def predict_risk(self, project_data: dict):
-        """Prediksi risiko proyek baru dengan optimized model"""
+        """Prediksi risiko proyek baru dengan domain enhanced model"""
         if not self.is_loaded:
-            raise Exception("Optimized model belum dimuat. Jalankan train_risk_model.py terlebih dahulu untuk generate optimized models.")
+            raise Exception("Domain enhanced model belum dimuat. Jalankan train_risk_model_enhanced.py terlebih dahulu untuk generate domain enhanced models.")
         
         try:
-            # Preprocess data dengan advanced pipeline
+            # Preprocess data dengan domain enhanced pipeline
             X_processed = self.preprocess_project_data(project_data)
             
             # Scale features
             X_scaled = self.scaler.transform(X_processed)
             
-            # Prediksi dengan optimized model
+            # Prediksi dengan domain enhanced model
             prediction = self.model.predict(X_scaled)[0]
             probabilities = self.model.predict_proba(X_scaled)[0]
             
@@ -323,32 +475,33 @@ class RiskPredictionEngine:
             max_prob = max(probabilities)
             confidence = round(max_prob * 100, 2)
             
-            # Analisis risiko sektor dengan advanced metrics
+            # Domain knowledge enhanced risk analysis
             risk_analysis = {}
-            if self.df_sektor is not None and 'id_sektor' in project_data:
-                sector_info = self.df_sektor[self.df_sektor['id_sektor'] == project_data['id_sektor']]
-                if not sector_info.empty:
-                    risk_rank = sector_info.iloc[0]['risk_rank']
+            if self.domain_risk_weights is not None and 'id_sektor' in project_data:
+                sektor_weights = self.domain_risk_weights.get('sektor_weights', {})
+                sektor_info = sektor_weights.get(str(project_data['id_sektor']), {})
+                
+                if sektor_info:
                     risk_analysis = {
-                        'sector_risk_rank': int(risk_rank),
-                        'sector_risk_level': (
-                            'Sangat Tinggi' if risk_rank <= 3 else 
-                            'Tinggi' if risk_rank <= 7 else 
-                            'Menengah' if risk_rank <= 11 else 'Rendah'
-                        ),
-                        'sector_confidence_modifier': (
-                            1.1 if risk_rank <= 3 else
-                            1.05 if risk_rank <= 7 else
-                            1.0 if risk_rank <= 11 else 0.95
-                        )
+                        'domain_sektor_risk_score': sektor_info.get('risk_score', 0.5),
+                        'domain_sektor_risk_level': sektor_info.get('kategori_risiko', 'Menengah'),
+                        'domain_knowledge_applied': True,
+                        'features_enhanced': 14
                     }
                     
-                    # Adjust confidence based on sector risk
-                    confidence = min(95, confidence * risk_analysis['sector_confidence_modifier'])
-            
-            # Enhanced prediction quality indicator
+                    # Adjust confidence based on domain knowledge consistency
+                    domain_score = sektor_info.get('risk_score', 0.5)
+                    if (predicted_label == 'Tinggi' and domain_score > 0.7) or \
+                       (predicted_label == 'Rendah' and domain_score < 0.3) or \
+                       (predicted_label == 'Menengah' and 0.3 <= domain_score <= 0.7):
+                        confidence = min(95, confidence * 1.1)  # Boost confidence when consistent
+                    
+            # Prediction quality indicator with domain knowledge
             entropy = -sum(p * np.log(p + 1e-10) for p in probabilities)
-            prediction_quality = "High" if entropy < 0.8 else "Medium" if entropy < 1.2 else "Low"
+            prediction_quality = "High" if entropy < 0.6 else "Medium" if entropy < 1.0 else "Low"
+            
+            # Model version from metadata
+            model_version = self.model_metadata.get('version', 'domain_enhanced_v3.0') if self.model_metadata else 'domain_enhanced_v3.0'
             
             return {
                 'predicted_risk': predicted_label,
@@ -356,18 +509,19 @@ class RiskPredictionEngine:
                 'probabilities': prob_dict,
                 'risk_analysis': risk_analysis,
                 'prediction_quality': prediction_quality,
-                'model_version': 'optimized_v2.0',
-                'features_used': len(self.feature_columns)
+                'model_version': model_version,
+                'features_used': len(self.feature_columns),
+                'domain_knowledge_integrated': self.domain_risk_weights is not None
             }
             
         except Exception as e:
-            raise Exception(f"Error in optimized risk prediction: {str(e)}")
+            raise Exception(f"Error in domain enhanced risk prediction: {str(e)}")
     
     def save_prediction_to_csv(self, project_dict: dict, prediction_result: dict):
-        """Simpan hasil prediksi ke CSV dataset untuk continuous learning"""
+        """Simpan hasil prediksi ke CSV dataset untuk continuous learning dengan domain enhanced model"""
         try:
             # Path file untuk menyimpan data baru
-            new_data_path = "data/data_kpbu_with_predictions_optimized.csv"
+            new_data_path = "data/data_kpbu_with_domain_enhanced_predictions.csv"
             
             # Prepare data untuk disimpan dengan enhanced features
             save_data = {
@@ -388,8 +542,11 @@ class RiskPredictionEngine:
                 'predicted_risk': prediction_result['predicted_risk'],
                 'prediction_confidence': prediction_result['confidence'],
                 'prediction_quality': prediction_result.get('prediction_quality', 'Medium'),
-                'model_version': prediction_result.get('model_version', 'optimized_v2.0'),
+                'model_version': prediction_result.get('model_version', 'domain_enhanced_v3.0'),
                 'features_used': prediction_result.get('features_used', 0),
+                'domain_knowledge_integrated': prediction_result.get('domain_knowledge_integrated', False),
+                'domain_sektor_risk_score': prediction_result.get('risk_analysis', {}).get('domain_sektor_risk_score'),
+                'domain_sektor_risk_level': prediction_result.get('risk_analysis', {}).get('domain_sektor_risk_level'),
                 'prediction_timestamp': datetime.now().isoformat()
             }
             
@@ -411,7 +568,7 @@ class RiskPredictionEngine:
             return True, datetime.now().isoformat()
             
         except Exception as e:
-            print(f"Error saving optimized prediction to CSV: {e}")
+            print(f"Error saving domain enhanced prediction to CSV: {e}")
             return False, None
 
 # ===================== CHATBOT ENGINE =====================
@@ -1189,8 +1346,8 @@ async def get_dataset_statistics(
         # Statistik dataset asli
         original_count = len(data_loader.df_proyek)
         
-        # Check file prediksi baru
-        new_data_path = "data/data_kpbu_with_predictions.csv"
+        # Check file prediksi baru dengan domain enhanced model
+        new_data_path = "data/data_kpbu_with_domain_enhanced_predictions.csv"
         predictions_count = 0
         latest_prediction = None
         
@@ -1236,8 +1393,9 @@ async def get_dataset_statistics(
             "latest_prediction": latest_prediction,
             "data_sources": {
                 "original_dataset": "data/data_kpbu.csv",
-                "predictions_dataset": "data/data_kpbu_with_predictions.csv",
-                "prediction_model": "model/saved_models/"
+                "predictions_dataset": "data/data_kpbu_with_domain_enhanced_predictions.csv",
+                "prediction_model": "model/saved_models/domain_enhanced_*",
+                "domain_knowledge": "model/saved_models/domain_risk_weights.joblib"
             }
         }
         
