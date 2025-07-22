@@ -1,0 +1,27 @@
+nama_proyek,id_sektor,id_status,durasi_konsesi_tahun,nilai_investasi_total_idr,target_dana_tokenisasi_idr,persentase_tokenisasi,jenis_token_utama,token_risk_level_ordinal,token_ada_jaminan_pokok,token_return_berbasis_kinerja,dok_studi_kelayakan,dok_laporan_keuangan_audit,dok_peringkat_kredit,predicted_risk,prediction_confidence,prediction_quality,model_version,features_used,domain_knowledge_integrated,domain_sektor_risk_score,domain_sektor_risk_level,prediction_timestamp
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3,False,True,True,True,False,Menengah,53.9,Low,3.0,24,True,0.43,Menengah,2025-07-21T22:17:33.554607
+Jalan Tol Jakarta-Bandung,5,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3,False,True,True,True,False,Menengah,56.1,Low,3.0,24,True,0.32,Menengah,2025-07-21T22:17:44.204511
+Jalan Tol Jakarta-Bandung,5,3,10,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3,False,True,True,True,False,Menengah,52.8,Low,3.0,24,True,0.32,Menengah,2025-07-21T22:17:52.257755
+Jalan Tol Jakarta-Bandung,5,3,10,5500000000000.0,1000000000000.0,36.4,Infrastruktur,3,False,True,True,True,False,Menengah,52.8,Low,3.0,24,True,0.32,Menengah,2025-07-21T22:18:00.097086
+Jalan Tol Jakarta-Bandung,5,3,10,5500000000000.0,1000000000000.0,36.4,Infrastruktur,3,True,True,True,True,True,Menengah,64.9,Medium,3.0,24,True,0.32,Menengah,2025-07-21T22:18:05.689741
+Test Highway Project Enhanced,1,1,25,500000000000.0,100000000000.0,0.2,Asset-Backed Token (ABT),1,True,False,True,True,False,Rendah,91.3,High,3.0,24,True,0.22,Menengah,2025-07-21T22:51:13.005394
+Test Highway Project Enhanced,1,1,25,500000000000.0,100000000000.0,0.2,Asset-Backed Token (ABT),1,True,False,True,True,False,Rendah,91.3,High,3.0,24,True,0.22,Menengah,2025-07-21T22:52:25.437472
+Test Highway Project Enhanced,1,1,25,500000000000.0,100000000000.0,0.2,Asset-Backed Token (ABT),1,True,False,True,True,False,Rendah,91.3,High,3.0,24,True,0.22,Menengah,2025-07-21T22:52:50.472436
+Test Highway Project Enhanced,1,1,25,500000000000.0,100000000000.0,0.2,Asset-Backed Token (ABT),5,True,True,True,True,False,Menengah,48.0,Low,3.0,24,True,0.22,Menengah,2025-07-22T08:20:42.673773
+Test Highway Project Enhanced,1,1,25,500000000000.0,100000000000.0,0.7,Asset-Backed Token (ABT),5,True,True,True,True,False,Menengah,43.0,Low,3.0,24,True,0.22,Menengah,2025-07-22T08:20:59.571772
+Test Highway Project Enhanced,6,1,25,500000000000.0,100000000000.0,0.7,Asset-Backed Token (ABT),5,True,True,True,True,False,Menengah,43.0,Low,3.0,24,True,0.22,Menengah,2025-07-22T08:21:06.877170
+Test Highway Project Enhanced,6,1,25,500000000000.0,100000000000.0,0.7,Asset-Backed Token (ABT),5,True,True,True,True,False,Menengah,43.0,Low,3.0,24,True,0.22,Menengah,2025-07-22T08:21:08.161446
+Test Highway Project Enhanced,6,1,25,500000000000.0,100000000000.0,0.7,Asset-Backed Token (ABT),5,True,True,True,True,False,Menengah,43.0,Low,3.0,24,True,0.22,Menengah,2025-07-22T08:21:08.861520
+Test Highway Project Enhanced,6,1,25,500000000000.0,100000000000.0,0.7,Asset-Backed Token (ABT),5,True,True,True,True,True,Menengah,43.0,Low,3.0,24,True,0.22,Menengah,2025-07-22T08:21:11.726985
+Test Highway Project Enhanced,6,1,25,500000000000.0,100000000000.0,0.7,Utility Token,5,True,True,True,True,True,Menengah,49.0,Low,3.0,24,True,0.22,Menengah,2025-07-22T08:21:19.327182
+Test Highway Project Enhanced,6,1,25,500000000000.0,100000000000.0,0.7,Utility Token,1,True,True,True,True,True,Menengah,58.0,Medium,3.0,24,True,0.22,Menengah,2025-07-22T08:21:25.969106
+Test Highway Project Enhanced,6,1,25,500000000000.0,100000000000.0,0.7,Profit-Sharing Token,1,True,True,True,True,True,Menengah,58.0,Medium,3.0,24,True,0.22,Menengah,2025-07-22T08:21:31.003486
+Test Highway Project Enhanced,6,1,10,500000000000.0,100000000000.0,0.7,Profit-Sharing Token,1,True,True,True,True,True,Menengah,56.0,Medium,3.0,24,True,0.22,Menengah,2025-07-22T08:21:45.777578
+Test Highway Project Enhanced,21,1,10,500000000000.0,100000000000.0,0.7,Asset-Backed Token (ABT),5,False,False,False,False,False,Tinggi,42.0,Low,3.0,24,True,0.32,Menengah,2025-07-22T08:22:53.079363
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3,False,True,True,True,False,Menengah,53.9,Low,3.0,24,True,0.43,Menengah,2025-07-22T08:34:44.940183
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3,False,True,True,True,False,Menengah,53.9,Low,3.0,24,True,0.43,Menengah,2025-07-22T08:36:02.222976
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3,False,True,True,True,True,Menengah,53.9,Low,3.0,24,True,0.43,Menengah,2025-07-22T08:36:04.475406
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3,True,True,True,True,True,Menengah,66.0,Medium,3.0,24,True,0.43,Menengah,2025-07-22T08:36:06.619354
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Infrastruktur,3,False,False,False,False,False,Menengah,40.7,Low,3.0,24,True,0.43,Menengah,2025-07-22T08:36:12.645665
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Energi,3,False,False,False,False,False,Menengah,40.7,Low,3.0,24,True,0.43,Menengah,2025-07-22T08:36:18.194146
+Jalan Tol Jakarta-Bandung,3,3,25,5500000000000.0,2000000000000.0,36.4,Energi,5,False,False,False,False,False,Tinggi,47.0,Low,3.0,24,True,0.43,Menengah,2025-07-22T08:36:21.172296

@@ -1,0 +1,29 @@
+
+=== DOMAIN KNOWLEDGE ENHANCED MODEL TRAINING SUMMARY ===
+Generated: 2025-07-21 21:55:04
+
+FINAL MODEL PERFORMANCE:
+- Model Type: Domain Enhanced Ensemble
+- F1-weighted: 1.000
+- Accuracy: 1.000
+- Domain Knowledge Score: 1.000
+- Composite Score: 1.000
+- Rating: 9.7/10 - Excellent with Domain Knowledge
+
+DOMAIN KNOWLEDGE INTEGRATION:
+1. ✅ Risk weights dari expert knowledge
+2. ✅ Sektor, status, durasi, investasi risk scoring
+3. ✅ Token type dan risk level mapping
+4. ✅ Characteristics risk assessment
+5. ✅ Composite risk score calculation
+6. ✅ Domain-guided feature selection
+7. ✅ Expert knowledge consistency scoring
+
+FEATURES SELECTED: 24
+Domain Knowledge Features: 13
+
+USAGE:
+- Use domain_enhanced_* files for production
+- Includes expert knowledge risk scoring
+- Higher accuracy through domain integration
+===================================================

@@ -1,0 +1,313 @@
+{
+  "sektor_weights": {
+    "1": {
+      "kategori": "Air minum",
+      "bobot": 0.0022,
+      "risk_score": 0.22
+    },
+    "2": {
+      "kategori": "Infrastruktur",
+      "bobot": 0.0032,
+      "risk_score": 0.32
+    },
+    "3": {
+      "kategori": "Jalan",
+      "bobot": 0.0043,
+      "risk_score": 0.43
+    },
+    "4": {
+      "kategori": "Kesehatan",
+      "bobot": 0.0022,
+      "risk_score": 0.22
+    },
+    "5": {
+      "kategori": "Ketenagalistrikan",
+      "bobot": 0.0032,
+      "risk_score": 0.32
+    },
+    "6": {
+      "kategori": "Fasilitas pendidikan, penelitian dan pengembangan",
+      "bobot": 0.0022,
+      "risk_score": 0.22
+    },
+    "7": {
+      "kategori": "Telekomunikasi dan informatika",
+      "bobot": 0.0032,
+      "risk_score": 0.32
+    },
+    "8": {
+      "kategori": "Transportasi",
+      "bobot": 0.0043,
+      "risk_score": 0.43
+    },
+    "9": {
+      "kategori": "Bangunan negara antara lain gedung perkantoran, rumah negara dan sarana pendukung lainnya",
+      "bobot": 0.0022,
+      "risk_score": 0.22
+    },
+    "10": {
+      "kategori": "Pemasyarakatan",
+      "bobot": 0.0022,
+      "risk_score": 0.22
+    },
+    "11": {
+      "kategori": "Konservasi energi",
+      "bobot": 0.0032,
+      "risk_score": 0.32
+    },
+    "12": {
+      "kategori": "Sumber daya air dan irigasi",
+      "bobot": 0.0032,
+      "risk_score": 0.32
+    },
+    "13": {
+      "kategori": "Sistem pengelolaan air limbah terpusat",
+      "bobot": 0.0032,
+      "risk_score": 0.32
+    },
+    "14": {
+      "kategori": "Sistem pengelolaan air limbah setempat",
+      "bobot": 0.0032,
+      "risk_score": 0.32
+    },
+    "15": {
+      "kategori": "Sistem pengelolaan persampahan dan/atau limbah bahan berbahaya dan beracun",
+      "bobot": 0.0043,
+      "risk_score": 0.43
+    },
+    "16": {
+      "kategori": "Minyak dan gas bumi dan energi terbarukan termasuk bio energi",
+      "bobot": 0.0043,
+      "risk_score": 0.43
+    },
+    "17": {
+      "kategori": "Fasilitas perkotaan",
+      "bobot": 0.0032,
+      "risk_score": 0.32
+    },
+    "18": {
+      "kategori": "Kawasan",
+      "bobot": 0.0032,
+      "risk_score": 0.32
+    },
+    "19": {
+      "kategori": "Pariwisata",
+      "bobot": 0.0054,
+      "risk_score": 0.54
+    },
+    "20": {
+      "kategori": "Fasilitas sarana olahraga, kesenian dan budaya",
+      "bobot": 0.0043,
+      "risk_score": 0.43
+    },
+    "21": {
+      "kategori": "Perumahan rakyat",
+      "bobot": 0.0032,
+      "risk_score": 0.32
+    }
+  },
+  "status_weights": {
+    "1": {
+      "kategori": "Perencanaan",
+      "bobot": 0.015700000000000002,
+      "risk_score": 1.5700000000000003
+    },
+    "2": {
+      "kategori": "Penyiapan",
+      "bobot": 0.013000000000000001,
+      "risk_score": 1.3
+    },
+    "3": {
+      "kategori": "Lelang",
+      "bobot": 0.0104,
+      "risk_score": 1.04
+    },
+    "4": {
+      "kategori": "Penandatanganan dan Pembiayaan",
+      "bobot": 0.0078000000000000005,
+      "risk_score": 0.78
+    },
+    "5": {
+      "kategori": "Konstruksi",
+      "bobot": 0.0052,
+      "risk_score": 0.52
+    },
+    "6": {
+      "kategori": "Operasi",
+      "bobot": 0.0026,
+      "risk_score": 0.26
+    },
+    "7": {
+      "kategori": "Akhir Proyek",
+      "bobot": 0.0052,
+      "risk_score": 0.52
+    }
+  },
+  "duration_weights": {
+    "1": {
+      "kategori": "Kurang dari 10 tahun",
+      "bobot": 0.0118,
+      "risk_score": 1.18
+    },
+    "2": {
+      "kategori": "10 – 20 tahun",
+      "bobot": 0.0070999999999999995,
+      "risk_score": 0.71
+    },
+    "3": {
+      "kategori": "21 – 30 tahun",
+      "bobot": 0.004699999999999999,
+      "risk_score": 0.4699999999999999
+    },
+    "4": {
+      "kategori": "31 – 40 tahun",
+      "bobot": 0.0070999999999999995,
+      "risk_score": 0.71
+    },
+    "5": {
+      "kategori": "Lebih dari 40 tahun",
+      "bobot": 0.009399999999999999,
+      "risk_score": 0.9399999999999998
+    }
+  },
+  "investment_weights": {
+    "1": {
+      "kategori": "Kurang dari Rp 50 miliar",
+      "bobot": 0.0088,
+      "risk_score": 0.88
+    },
+    "2": {
+      "kategori": "Rp 50 miliar – < Rp 250 miliar",
+      "bobot": 0.0053,
+      "risk_score": 0.53
+    },
+    "3": {
+      "kategori": "Rp 250 miliar – < Rp 1 triliun",
+      "bobot": 0.0034999999999999996,
+      "risk_score": 0.35
+    },
+    "4": {
+      "kategori": "Rp 1 triliun – < Rp 5 triliun",
+      "bobot": 0.0053,
+      "risk_score": 0.53
+    },
+    "5": {
+      "kategori": "Rp 5 triliun atau lebih",
+      "bobot": 0.0070999999999999995,
+      "risk_score": 0.71
+    }
+  },
+  "tokenization_weights": {
+    "1": {
+      "kategori": "Kurang dari Rp 25 miliar",
+      "bobot": 0.0070999999999999995,
+      "risk_score": 0.71
+    },
+    "2": {
+      "kategori": "Rp 25 miliar – < Rp 100 miliar",
+      "bobot": 0.005699999999999999,
+      "risk_score": 0.57
+    },
+    "3": {
+      "kategori": "Rp 100 miliar – < Rp 500 miliar",
+      "bobot": 0.0043,
+      "risk_score": 0.43
+    },
+    "4": {
+      "kategori": "Rp 500 miliar – < Rp 1 triliun",
+      "bobot": 0.0029,
+      "risk_score": 0.29
+    },
+    "5": {
+      "kategori": "Rp 1 triliun – < Rp 5 triliun",
+      "bobot": 0.0043,
+      "risk_score": 0.43
+    },
+    "6": {
+      "kategori": "Rp 5 triliun atau lebih",
+      "bobot": 0.005699999999999999,
+      "risk_score": 0.57
+    }
+  },
+  "token_type_weights": {
+    "1": {
+      "kategori": "Asset-Backed Token (ABT)",
+      "bobot": 0.005600000000000001,
+      "risk_score": 0.56
+    },
+    "2": {
+      "kategori": "Revenue-Sharing Token (RST)",
+      "bobot": 0.0113,
+      "risk_score": 1.13
+    },
+    "3": {
+      "kategori": "Profit-Sharing Token",
+      "bobot": 0.0169,
+      "risk_score": 1.69
+    },
+    "4": {
+      "kategori": "Availability Payment Token",
+      "bobot": 0.0113,
+      "risk_score": 1.13
+    },
+    "5": {
+      "kategori": "Hybrid Token (gabungan RST + ABT)",
+      "bobot": 0.0169,
+      "risk_score": 1.69
+    },
+    "6": {
+      "kategori": "Utility Token",
+      "bobot": 0.0281,
+      "risk_score": 2.81
+    }
+  },
+  "risk_level_weights": {
+    "1": {
+      "kategori": "Sangat Rendah",
+      "bobot": 0.006,
+      "risk_score": 0.6
+    },
+    "2": {
+      "kategori": "Rendah",
+      "bobot": 0.012,
+      "risk_score": 1.2
+    },
+    "3": {
+      "kategori": "Sedang",
+      "bobot": 0.018000000000000002,
+      "risk_score": 1.8000000000000003
+    },
+    "4": {
+      "kategori": "Tinggi",
+      "bobot": 0.024,
+      "risk_score": 2.4
+    },
+    "5": {
+      "kategori": "Sangat Tinggi",
+      "bobot": 0.03,
+      "risk_score": 3.0
+    }
+  },
+  "characteristics_weights": {
+    "1": {
+      "kategori": "Ada Jamninan Pokok",
+      "bobot": 0.2,
+      "risk_score": 20.0
+    },
+    "2": {
+      "kategori": "Return berbasis kinerja",
+      "bobot": 0.1,
+      "risk_score": 10.0
+    },
+    "3": {
+      "kategori": "Dokumen Studi Kelayakan",
+      "bobot": 0.1,
+      "risk_score": 10.0
+    },
+    "4": {
+      "kategori": "Laporan Keuangan Audit",
+      "bobot": 0.1,
+      "risk_score": 10.0
+    }
+  }
+}

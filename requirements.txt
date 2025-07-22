@@ -9,3 +9,5 @@ joblib==1.5.1
 google-generativeai==0.8.5
 streamlit>=1.28.0
 requests>=2.31.0
+plotly>=5.0.0
+plotly-express>=0.4.1
