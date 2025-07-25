@@ -24,7 +24,7 @@ warnings.filterwarnings('ignore')
 AUTH_TOKEN = "kpbu-matchmaker-2025"  # Token statis untuk prototyping
 DATA_PATH = "data/data_kpbu_with_token.csv"
 MODEL_DIR = "model/saved_models"
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyAzRRl-ydj19ZSF9IJXILPlfNioAJp5mho")  # Set environment variable
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "GEMINI_API_KEY")  # Set environment variable
 
 # Configure Gemini
 genai.configure(api_key=GEMINI_API_KEY)
